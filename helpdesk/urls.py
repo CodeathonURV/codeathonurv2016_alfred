@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^pas/$', views.pas_topics, name='pas_topics_home'),
     url(r'^student/$', views.student_ask_faq, name='student_ask_faq_home'),
 
+    url(r'^search/$', views.get_queryset, name='search'),
     url(r'^pdi/topics/$', views.pdi_topics, name='pdi_topics'),
     url(r'^pas/topics/$', views.pas_topics, name='pas_topics'),
     url(r'^student/topics/$', views.student_topics, name='student_topics'),

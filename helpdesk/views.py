@@ -8,7 +8,7 @@ from django.db.models import Avg
 from helpdesk.models import *
 from helpdesk.tables import *
 from django.core.urlresolvers import reverse
-
+from django.db.models import Q
 from .forms import *
 
 # Create your views here.
@@ -226,7 +226,19 @@ def student_ask_faq(request):
         request.user.student
     except:
         return HttpResponse('Unauthorized', status=401)
+
     return render(request,'helpdesk/ask_faq.html', {'section': 'ask_faq','rol' : 'student' })
+
+@login_required
+def get_queryset(request):
+    result = ""
+    query = request.GET.get('q')
+    if query:
+        print 'q', query
+        result = Topic.objects.filter(is_public=True).filter(Q(title__icontains=query)).order_by('last_update')
+        print 'result', result
+        table = TopicsTable(result)
+    return render(request,'helpdesk/search.html', {'section': 'results', 'role':'student', 'table' : table })
 
 @login_required
 def student_ask(request):
