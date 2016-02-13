@@ -34,10 +34,6 @@ def pdi_new_topic_for_pas(request):
         # check whether it's valid:
 
         if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-
             department = form.cleaned_data['department']
             pas_set = department.pas_set.all()
             title = form.cleaned_data["title"]
@@ -46,10 +42,10 @@ def pdi_new_topic_for_pas(request):
 
             if(len(pas_set) == 1):
                 teacher = pas_set[0]
-                topic = Topic(title=title, content=content, priority=priority, receiver=teacher.user, author=request.user).save()
+                topic = Topic(title=title, content=content, priority=priority, receiver=teacher.user, department=True, author=request.user).save()
                 return HttpResponseRedirect('/helpdesk/pdi/topics')
             else:
-                topic = Topic(title=title, content=content, priority=priority, author=request.user)
+                topic = Topic(title=title, content=content, priority=priority, department=True, author=request.user)
                 topic.save()
                 request.session["topic"] = topic.id
                 request.session["department"] = department.id
@@ -161,10 +157,10 @@ def  pas_new_topic_for_pas(request):
 
             if(len(pas_set) == 1):
                 teacher = pas_set[0]
-                topic = Topic(title=title, content=content, priority=priority, receiver=teacher.user, author=request.user).save()
+                topic = Topic(title=title, content=content, priority=priority, receiver=teacher.user, department=True, author=request.user).save()
                 return HttpResponseRedirect('/helpdesk/pas/topics')
             else:
-                topic = Topic(title=title, content=content, priority=priority, author=request.user)
+                topic = Topic(title=title, content=content, priority=priority, department=True, author=request.user)
                 topic.save()
                 request.session["topic"] = topic.id
                 request.session["department"] = department.id
@@ -347,10 +343,10 @@ def  student_new_topic_for_pas(request):
 
             if(len(pas_set) == 1):
                 teacher = pas_set[0]
-                topic = Topic(title=title, content=content, priority=priority, receiver=teacher.user, author=request.user).save()
+                topic = Topic(title=title, content=content, priority=priority, receiver=teacher.user, department=True, author=request.user).save()
                 return HttpResponseRedirect('/helpdesk/student/topics')
             else:
-                topic = Topic(title=title, content=content, priority=priority, author=request.user)
+                topic = Topic(title=title, content=content, priority=priority, department=True, author=request.user)
                 topic.save()
                 request.session["topic"] = topic.id
                 request.session["department"] = department.id
@@ -399,11 +395,13 @@ def get_queryset(request):
     result = ""
     query = request.GET.get('q')
     if query:
-        print 'q', query
+
         result = Topic.objects.filter(is_public=True).filter(Q(title__icontains=query)).order_by('last_update')
-        print 'result', result
+        print 'result', type(result), result
+        subjects = result.filter(department=False)
+        departments = result.filte(department=True)
         table = TopicsTable(result)
-    return render(request,'helpdesk/search.html', {'section': 'results', 'role':'student', 'table' : table })
+    return render(request,'helpdesk/search.html', {'section': 'results', 'role':'student', 'subjects' : subjects, 'departments' : departments  })
 
 @login_required
 def student_ask(request):
