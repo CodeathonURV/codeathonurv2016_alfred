@@ -57,7 +57,7 @@ class Topic(models.Model):
     #It would be interesting to add tags http://django-taggit.readthedocs.org/en/latest/
     title = models.CharField(max_length=200)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='topic_author')
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='topic_receiver')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='topic_receiver', blank=True,  null=True)
     status = models.CharField(max_length=9, choices=STATUS_OPTIONS, default="OPEN")
     creation_date = models.DateTimeField('date_published', default=datetime.now)
     last_update = models.DateTimeField('last_update', default=datetime.now)

@@ -147,7 +147,8 @@ def student_topics(request):
         request.user.student
     except:
         return HttpResponse('Unauthorized', status=401)
-    return render(request,'helpdesk/topics.html', {'section': 'topics', 'rol':'student'})
+    table = TopicsTable(Topic.objects.filter(author__id=request.user.id))
+    return render(request,'helpdesk/topics.html', {'section': 'topics', 'rol':'student', 'table':table})
 
 @login_required
 def  student_new_topic_for_pdi(request):
@@ -166,26 +167,22 @@ def  student_new_topic_for_pdi(request):
 
             subject = form.cleaned_data['subject']
 
+
             pdi_set = subject.pdi_set.all()
+            title = form.cleaned_data["title"]
+            subject = form.cleaned_data["subject"]
+            content = form.cleaned_data["content"]
+            priority = form.cleaned_data["priority"]
 
             if(len(pdi_set) == 1):
-                #Create new topic
-                request.session['topic_form'] = form
-
-                title = form.cleaned_data["title"]
-                subject = form.cleaned_data["subject"]
-                content = form.cleaned_data["content"]
-                priority = form.cleaned_data["priority"]
                 teacher = pdi_set[0]
-
-                topic = Topic(title=title, content=content, priority=priority, receiver=pdi_set[0].user, author=request.user)
-
-                print "hola",topic
-
-                topic.save()
+                topic = Topic(title=title, content=content, priority=priority, receiver=teacher.user, author=request.user).save()
                 return HttpResponseRedirect('/helpdesk/student/topics')
             else:
-                url = reverse('student_choose_teacher', kwargs={'topic_form': form})
+                topic = Topic(title=title, content=content, priority=priority, author=request.user)
+                topic.save()
+                request.session["topic"] = topic.id
+                request.session["subject"] = subject.id
                 return HttpResponseRedirect('/helpdesk/student/ask/pdi/teacher')
 
     # if a GET (or any other method) we'll create a blank form
@@ -197,30 +194,24 @@ def  student_new_topic_for_pdi(request):
 @login_required
 def  student_choose_teacher(request):
     # if this is a POST request we need to process the form data
+    subject = Subject.objects.get(pk=request.session['subject'])
+    teachers = subject.pdi_set.all()
+
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        form = TeacherChooser(request.POST)
+        form = TeacherChooser(request.POST, dynamic_choices=teachers)
         # check whether it's valid:
-        topic_form = request.session['topic_form']
 
         if form.is_valid():
-            title = topic_form.cleaned_data["title"]
-            subject = topic_form.cleaned_data["subject"]
-            content = topic_form.cleaned_data["content"]
-            priority = topic_form.cleaned_data["priority"]
             teacher = form.cleaned_data["teacher"]
-
-            Topic(title=title, subject=subject, content=content, priority=priority, receiver=request.user, author=teacher).save()
-
+            topic = Topic.objects.get(pk=request.session['topic'])
+            topic.receiver = teacher.user
+            topic.save()
+            return HttpResponseRedirect('/helpdesk/student/topics')
     # if a GET (or any other method) we'll create a blank form
-    teachers = list()
 
-    subject = Subject.objects.get(pk=request.session['topic_form'].cleaned_data['subject'])
 
-    for pdi in subject.pdi_set.all():
-        teachers.append((pdi.pk, pdi.user.username))
-
-    form = TeacherChooser(teachers)
+    form = TeacherChooser(dynamic_choices=teachers)
 
     return render(request, 'helpdesk/choose_teacher.html', {'rol':'student','form': form})
 
@@ -252,7 +243,7 @@ def student_topic(request, topic_id):
     except:
         return HttpResponse('Unauthorized', status=401)
     topic = Topic.objects.get(pk=topic_id)
-    comments = list(Comment.objects.filter(topic__id=topic_id)).order_by('date_published')
+    comments = list(Comment.objects.filter(topic__id=topic_id).order_by('date_published'))
     return render(request,'helpdesk/topic.html', {'section': 'topic', 'rol' : 'student', 'topic':topic, 'comments':comments})
 
 @login_required

@@ -50,16 +50,17 @@ class NewTopicForPdi(forms.Form):
 
 class TeacherChooser(forms.Form):
 
-    CHOICES = (
-        ('', ''),
-    )
+    teacher = forms.ModelChoiceField(queryset=None)
 
-    teacher = forms.ChoiceField(choices=CHOICES, required=True, label='Teacher')
-
-    def __init__(self, teachers=None, *args, **kwargs):
-        super(NewTopicForPdi, self).__init__(*args, **kwargs)
-        if teachers:
-            self.fields['teacher'].choices = teachers
-
-
-
+    def __init__(self, *args, **kwargs):
+        try:
+            dynamic_choices = kwargs.pop('dynamic_choices')
+        except KeyError:
+            dynamic_choices = None # if normal form
+        super(TeacherChooser, self).__init__(*args, **kwargs)
+        if dynamic_choices is not None:
+            self.fields['teacher'] = ModelChoiceField(
+                                          queryset=dynamic_choices)
+    class Meta:
+        model = User
+        

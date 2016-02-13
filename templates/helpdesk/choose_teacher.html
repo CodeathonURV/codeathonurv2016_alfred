@@ -1,6 +1,12 @@
 {% extends "base.html" %}
-   {% block title %}Dashboard{% endblock %}
-   {% block content %}
-     <h1>Dashboard</h1>
-     <p>Welcome to your dashboard.</p>
-{% endblock %}
+
+{% block content %}
+
+
+<form {% if rol == "pdi" %} action="/helpdesk/pdi/ask/teacher/" {% elif rol == "student" %} action="/helpdesk/student/ask/pdi/teacher/" {% elif rol == "pas" %} action="/helpdesk/pas/ask/teacher/" {% endif %}  method="post">
+    {% csrf_token %}
+    {{ form.as_table }}
+    <input type="submit" value="Submit" />
+</form>
+
+{% endblock content %}

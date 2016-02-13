@@ -32,6 +32,6 @@ urlpatterns = [
     url(r'^student/ask/pas/$', views.student_new_topic_for_pas, name='student_new_topic_pas'),
     url(r'^student/ask/pdi/$', views.student_new_topic_for_pdi, name='student_new_topic_pdi'),
 
-    url(r'^student/ask/pdi/teacher/$', views.student_new_topic_for_pdi, name='student_choose_teacher'),
+    url(r'^student/ask/pdi/teacher/$', views.student_choose_teacher, name='student_choose_teacher'),
 
 ]
