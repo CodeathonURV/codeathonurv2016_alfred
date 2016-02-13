@@ -124,7 +124,7 @@ def pdi_ranking(request):
     return render(request,'helpdesk/ranking.html', {'section': 'ranking', 'rol' : 'pdi', 'user_ranking':user_ranking})
 
 @login_required
-def pdi_profile(request):
+def pdi_profile(request, pk):
     try:
         request.user.pdi
     except:
@@ -241,7 +241,7 @@ def pas_ranking(request):
     return render(request,'helpdesk/ranking.html', {'section': 'ranking', 'rol' : 'pas', 'user_ranking':user_ranking})
 
 @login_required
-def pas_profile(request):
+def pas_profile(request, pk):
     try:
         request.user.pas
     except:
@@ -424,7 +424,7 @@ def student_topic(request, topic_id):
     return render(request,'helpdesk/topic.html', {'section': 'topic', 'rol' : 'student', 'topic':topic, 'comments':comments})
 
 @login_required
-def student_profile(request):
+def student_profile(request, pk):
     try:
         request.user.student
     except:
