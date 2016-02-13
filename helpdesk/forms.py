@@ -18,7 +18,7 @@ class NewTopicForPas(forms.Form):
             dynamic_choices = kwargs.pop('dynamic_choices')
         except KeyError:
             dynamic_choices = None # if normal form
-        super(NewTopicForPdi, self).__init__(*args, **kwargs)
+        super(NewTopicForPas, self).__init__(*args, **kwargs)
         if dynamic_choices is not None:
             self.fields['department'] = ModelChoiceField(
                                           queryset=dynamic_choices)
@@ -47,6 +47,22 @@ class NewTopicForPdi(forms.Form):
 
     class Meta:
         model = Subject
+
+class EmployeeChooser(forms.Form):
+
+    employee = forms.ModelChoiceField(queryset=None)
+
+    def __init__(self, *args, **kwargs):
+        try:
+            dynamic_choices = kwargs.pop('dynamic_choices')
+        except KeyError:
+            dynamic_choices = None # if normal form
+        super(EmployeeChooser, self).__init__(*args, **kwargs)
+        if dynamic_choices is not None:
+            self.fields['employee'] = ModelChoiceField(
+                                          queryset=dynamic_choices)
+    class Meta:
+        model = User
 
 class TeacherChooser(forms.Form):
 
