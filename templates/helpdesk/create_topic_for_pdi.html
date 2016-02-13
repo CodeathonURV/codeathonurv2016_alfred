@@ -3,7 +3,7 @@
 {% block content %}
 
 
-<form {% if rol == "pdi" %} action="/helpdesk/pdi/ask" {% elif rol == "student" %} action="/helpdesk/student/ask" {% elif rol == "pas" %} action="/helpdesk/pas/ask/pdi/" {% endif %}  method="post">
+<form {% if rol == "pdi" %} action="/helpdesk/pdi/ask/" {% elif rol == "student" %} action="/helpdesk/student/ask/pdi/" {% elif rol == "pas" %} action="/helpdesk/pas/ask/" {% endif %}  method="post">
     {% csrf_token %}
     {{ form.as_table }}
     <input type="submit" value="Submit" />

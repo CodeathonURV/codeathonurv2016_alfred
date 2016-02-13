@@ -3,8 +3,9 @@
 {% block content %}
 
 
-<form {% if rol == "pdi" %} action="/helpdesk/pdi/ask" {% elif rol == "student" %} action="/helpdesk/student/ask/" {% elif rol == "pas" %} action="/helpdesk/pas/ask" {% endif %}  method="post">
+<form {% if rol == "pdi" %} action="/helpdesk/pdi/ask/" {% elif rol == "student" %} action="/helpdesk/student/ask/pas/" {% elif rol == "pas" %} action="/helpdesk/pas/ask/" {% endif %}  method="post">
     {% csrf_token %}
+    {{ form.path }}
     {{ form.as_table }}
     <input type="submit" value="Submit" />
 </form>

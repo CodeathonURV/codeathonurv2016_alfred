@@ -1,36 +1,52 @@
 from django import forms
+from .models import *
+from django.forms import ModelChoiceField
 
 class NewComment(forms.Form):
     content = forms.CharField(widget=forms.Textarea)
 
 class NewTopicForPas(forms.Form):
-    CHOICES = (
-        ('', ''),
-    )
 
-    department = forms.ChoiceField(choices=CHOICES, required=True, label='Subject')
+    title = forms.CharField()
+
+    priority = forms.ChoiceField(choices=PRIORITY_OPTIONS, required=True, label='Priority')
 
     content = forms.CharField(widget=forms.Textarea, required=True)
 
-    def __init__(self, departments=None, *args, **kwargs):
-        super(NewTopicForPas, self).__init__(*args, **kwargs)
-        if departments:
-            self.fields['department'].choices = departments
+    def __init__(self, *args, **kwargs):
+        try:
+            dynamic_choices = kwargs.pop('dynamic_choices')
+        except KeyError:
+            dynamic_choices = None # if normal form
+        super(NewTopicForPdi, self).__init__(*args, **kwargs)
+        if dynamic_choices is not None:
+            self.fields['department'] = ModelChoiceField(
+                                          queryset=dynamic_choices)
+    class Meta:
+        model = Department
 
 class NewTopicForPdi(forms.Form):
 
-    CHOICES = (
-        ('', ''),
-    )
+    def __init__(self, *args, **kwargs):
+        try:
+            dynamic_choices = kwargs.pop('dynamic_choices')
+        except KeyError:
+            dynamic_choices = None # if normal form
+        super(NewTopicForPdi, self).__init__(*args, **kwargs)
+        if dynamic_choices is not None:
+            self.fields['subject'] = ModelChoiceField(
+                                          queryset=dynamic_choices)
 
-    subject = forms.ChoiceField(choices=CHOICES, required=True, label='Subject')
+    title = forms.CharField()
+
+    priority = forms.ChoiceField(choices=PRIORITY_OPTIONS, required=True, label='Priority')
 
     content = forms.CharField(widget=forms.Textarea, required=True)
 
-    def __init__(self, subjects=None, *args, **kwargs):
-        super(NewTopicForPdi, self).__init__(*args, **kwargs)
-        if subjects:
-            self.fields['subject'].choices = subjects
+    subject = forms.ModelChoiceField(queryset=None)
+
+    class Meta:
+        model = Subject
 
 class TeacherChooser(forms.Form):
 

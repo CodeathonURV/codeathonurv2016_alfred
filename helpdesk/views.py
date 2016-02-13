@@ -7,6 +7,7 @@ from django.views.generic import UpdateView
 from django.db.models import Avg
 from helpdesk.models import *
 from helpdesk.tables import *
+from django.core.urlresolvers import reverse
 
 from .forms import *
 
@@ -151,42 +152,77 @@ def student_topics(request):
 @login_required
 def  student_new_topic_for_pdi(request):
     # if this is a POST request we need to process the form data
+
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        form = NewTopicForPdi(request.POST)
-        # check whether it's valid:
-        form
-        if form.is_valid():
 
+        form = NewTopicForPdi(request.POST, dynamic_choices=request.user.student.subjects.all())
+        # check whether it's valid:
+
+        if form.is_valid():
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
 
-            pdi_set = form.subject.pdi_set.all()
+            subject = form.cleaned_data['subject']
+
+            pdi_set = subject.pdi_set.all()
 
             if(len(pdi_set) == 1):
                 #Create new topic
-                #TODO
+                request.session['topic_form'] = form
+
+                title = form.cleaned_data["title"]
+                subject = form.cleaned_data["subject"]
+                content = form.cleaned_data["content"]
+                priority = form.cleaned_data["priority"]
+                teacher = pdi_set[0]
+
+                topic = Topic(title=title, content=content, priority=priority, receiver=pdi_set[0].user, author=request.user)
+
+                print "hola",topic
+
+                topic.save()
                 return HttpResponseRedirect('/helpdesk/student/topics')
             else:
-                teachers = ()
-                for pdi in pdi_set:
-                    teachers.append(pdi.pk, pdi.user.username)
-
-                form = TeacherChooser(teachers)
-                return render(request, 'choose_teacher.html', {'rol':'student', 'form': form})
-        else:
-            form = NewTopicForPdi()
+                url = reverse('student_choose_teacher', kwargs={'topic_form': form})
+                return HttpResponseRedirect('/helpdesk/student/ask/pdi/teacher')
 
     # if a GET (or any other method) we'll create a blank form
-    subjects = list()
-
-    for subject in request.user.student.subjects.all():
-        subjects.append((subject.pk, subject.title))
-
-    form = NewTopicForPdi(subjects)
+    subjects = request.user.student.subjects.all()
+    form = NewTopicForPdi(dynamic_choices=subjects)
 
     return render(request, 'helpdesk/create_topic_for_pdi.html', {'rol':'student','form': form})
+
+@login_required
+def  student_choose_teacher(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = TeacherChooser(request.POST)
+        # check whether it's valid:
+        topic_form = request.session['topic_form']
+
+        if form.is_valid():
+            title = topic_form.cleaned_data["title"]
+            subject = topic_form.cleaned_data["subject"]
+            content = topic_form.cleaned_data["content"]
+            priority = topic_form.cleaned_data["priority"]
+            teacher = form.cleaned_data["teacher"]
+
+            Topic(title=title, subject=subject, content=content, priority=priority, receiver=request.user, author=teacher).save()
+
+    # if a GET (or any other method) we'll create a blank form
+    teachers = list()
+
+    subject = Subject.objects.get(pk=request.session['topic_form'].cleaned_data['subject'])
+
+    for pdi in subject.pdi_set.all():
+        teachers.append((pdi.pk, pdi.user.username))
+
+    form = TeacherChooser(teachers)
+
+    return render(request, 'helpdesk/choose_teacher.html', {'rol':'student','form': form})
 
 @login_required
 def  student_new_topic_for_pas(request):

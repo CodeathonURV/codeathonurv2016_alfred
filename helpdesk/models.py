@@ -63,11 +63,12 @@ class Topic(models.Model):
     last_update = models.DateTimeField('last_update', default=datetime.now)
     priority = models.CharField(max_length=9, choices=PRIORITY_OPTIONS, default="MEDIUM")
     is_public = models.BooleanField(default=False)
+    content = models.TextField()
     def __unicode__(self):
         return self.title
 
 class Comment(models.Model):
-    content = models.CharField(max_length=200)
+    content = models.TextField()
     rating = models.IntegerField()
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comment_author')
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='comment_topic')
