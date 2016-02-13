@@ -3,79 +3,118 @@
 <head>
  <title>{% block title %}{% endblock %}</title>
 
- <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:700italic,400,300,700' rel='stylesheet' type='text/css'>
- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+{# Load the tag library #}
+{% load bootstrap3 %}
 
-    {% load staticfiles %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 
-    <link rel="stylesheet" type="text/css" href="{% static 'account/css/style.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'account/css/style-desktop.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'account/css/style-1000px.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'account/css/style-mobile.css' %}" />
-    <!--[if lte IE 8]><script src="{% static 'account/js/html5shiv.js' %} "></script><![endif]-->
-    <noscript>
-        <link rel="stylesheet" type="text/css" href="{% static 'account/css/skel-noscript.css' %}" />
-        <script src="{% static 'account/js/skel.min.js' %}"></script>
-        <script src="{% static 'account/js/skel-panels.min.js'%}"></script>
-        <script src="{% static 'account/js/init.js'%}"></script>
-    </noscript>
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+
+{% load staticfiles %}
+
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'helpdesk/css/styles.css' %}" />
 
 </head>
+
+	<header>
+		<img src="{% static 'helpdesk/img/logo.png' %}" width="140">
+		<nav>
+          <a  {% if rol == "pdi" %}
+          href="{% url "pdi_topics" %}"
+         {% elif rol == "pas" %}
+         href="{% url "pas_topics" %}"
+         {% elif rol == "student" %}
+         href="{% url "student_topics" %}"
+         {% endif %}{% if section == "topics" %}class="selected"{% endif %}
+         >Consultes</a>
+
+            <a {% if rol == "pdi" %}
+         href="{% url "pdi_new_topic" %}"
+         {% elif rol == "pas" %}
+         href="{% url "pas_new_topic" %}"
+         {% elif rol == "student" %}
+         href="{% url "student_new_topic_pdi" %}"
+         {% endif %}{% if section == "ask_faq" %}class="selected"{% endif %}
+         >Nova consulta</a>
+
+        {% if rol != "student" %}
+            <a {% if rol == "pdi" %}
+         href="{% url "pdi_ranking" %}"
+         {% elif rol == "pas" %}
+         href="{% url "pas_ranking" %}"
+         {% endif %}{% if section == "ranking" %}class="selected"{% endif %}
+         >Rànquing</a>
+        {% endif %}
+
+            <a 	{% if rol == "pdi" %}
+         href="{% url "pdi_profile" request.user.pdi.pk %}"
+         {% elif rol == "pas" %}
+         href="{% url "pas_profile" request.user.pas.pk %}"
+         {% elif rol == "student" %}
+         href="{% url "student_profile" request.user.student.pk %}"
+         {% endif %}{% if section == "profile" %}class="selected"{% endif %}
+            >Perfil</a>
+
+		</nav>
+		<input type="checkbox" id="menu">
+				<label for="menu"><img class="imenu" src="{% static 'helpdesk/img/menu.png' %}" width="70"></label>
+
+					<ul class="nav2">
+					<li>          <a  {% if rol == "pdi" %}
+          href="{% url "pdi_topics" %}"
+         {% elif rol == "pas" %}
+         href="{% url "pas_topics" %}"
+         {% elif rol == "student" %}
+         href="{% url "student_topics" %}"
+         {% endif %}{% if section == "topics" %}class="selected"{% endif %}
+         >Consultes</a></li>
+					<li>            <a {% if rol == "pdi" %}
+         href="{% url "pdi_new_topic" %}"
+         {% elif rol == "pas" %}
+         href="{% url "pas_new_topic" %}"
+         {% elif rol == "student" %}
+         href="{% url "student_new_topic_pdi" %}"
+         {% endif %}{% if section == "ask_faq" %}class="selected"{% endif %}
+         >Nova consulta</a></li>
+			 {% if rol != "student" %}		<li>
+            <a {% if rol == "pdi" %}
+         href="{% url "pdi_ranking" %}"
+         {% elif rol == "pas" %}
+         href="{% url "pas_ranking" %}"
+         {% endif %}{% if section == "ranking" %}class="selected"{% endif %}
+         >Rànquing</a>
+       </li> {% endif %}
+					<li><a 	{% if rol == "pdi" %}
+         href="{% url "pdi_profile" request.user.pdi.pk }"
+         {% elif rol == "pas" %}
+         href="{% url "pas_profile" request.user.pas.pk %}"
+         {% elif rol == "student" %}
+         href="{% url "student_profile" request.user.student.pk %}"
+         {% endif %}{% if section == "profile" %}class="selected"{% endif %}
+            >Perfil</a></li>
+					<img src="{% static 'helpdesk/img/urv.png' %}" width="80">
+				</ul>
+
+	</header>
+
 <body class="homepage">
 
- <div id="head">
-   <!--<span class="logo">Bookmarks</span>-->
-   {% if request.user.is_authenticated %}
-     <ul class="menu">
-       <li {% if section == "topics" %}class="selected"{% endif %}>
-         {% if rol == "pdi" %}
-         <a href="{% url "pdi_topics" %}">
-         {% elif rol == "pas" %}
-         <a href="{% url "pas_topics" %}">
-         {% elif rol == "student" %}
-         <a href="{% url "student_topics" %}">
-         {% endif %}
-         Consultes</a>
-       </li>
-       <li {% if section == "ask_faq" %}class="selected"{% endif %}>
-         {% if rol == "pdi" %}
-         <a href="{% url "pdi_new_topic" %}">
-         {% elif rol == "pas" %}
-         <a href="{% url "pas_new_topic" %}">
-         {% elif rol == "student" %}
-         <a href="{% url "student_new_topic_pdi" %}">
-         {% endif %}
-         Nova consulta</a>
-       </li>
-         {% if rol != "student" %}
-       <li {% if section == "ranking" %}class="selected"{% endif %}>
-         {% if rol == "pdi" %}
-         <a href="{% url "pdi_ranking" %}">
-         {% elif rol == "pas" %}
-         <a href="{% url "pas_ranking" %}">
-         {% endif %}
-         Rànquing</a>
-       </li>
-         {% endif %}
-       <li {% if section == "profile" %}class="selected"{% endif %}>
-         {% if rol == "pdi" %}
-         <a href="{% url "pdi_profile" request.user.pdi.pk }">
-         {% elif rol == "pas" %}
-         <a href="{% url "pas_profile" request.user.pas.pk %}">
-         {% elif rol == "student" %}
-         <a href="{% url "student_profile" request.user.student.pk %}">
-         {% endif %}Perfil</a>
-       </li>
-     </ul>
-  {% endif %}
-  <span class="user">
+
+  <!--<span class="user">
    {% if request.user.is_authenticated %}
      Hello {{ request.user.first_name }},
      <a href="{% url 'logout' %}">Logout</a>
    {% else %}
      <a href="{% url 'login' %}">Log-in</a>
    {% endif %}
-  </span>
+  </span>-->
 
 </div>
  <div id="content">
@@ -83,4 +122,9 @@
    {% endblock %}
  </div>
 </body>
+
+	<footer>
+		<p>© CODEATHON URV 2016 - DJANGOG</p>
+	</footer>
+
 </html>
