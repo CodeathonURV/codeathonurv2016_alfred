@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>{% block title %}{% endblock %}</title>
+
+ <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:700italic,400,300,700' rel='stylesheet' type='text/css'>
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+    {% load staticfiles %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'account/css/style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'account/css/style-desktop.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'account/css/style-1000px.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'account/css/style-mobile.css' %}" />
+    <!--[if lte IE 8]><script src="{% static 'account/js/html5shiv.js' %} "></script><![endif]-->
+    <noscript>
+        <link rel="stylesheet" type="text/css" href="{% static 'account/css/skel-noscript.css' %}" />
+        <script src="{% static 'account/js/skel.min.js' %}"></script>
+        <script src="{% static 'account/js/skel-panels.min.js'%}"></script>
+        <script src="{% static 'account/js/init.js'%}"></script>
+    </noscript>
+
+</head>
+<body class="homepage">
+
+ <div id="head">
+   <!--<span class="logo">Bookmarks</span>-->
+   {% if request.user.is_authenticated %}
+     <ul class="menu">
+       <li {% if section == "topics" %}class="selected"{% endif %}>
+         {% if rol == "pdi" %}
+         <a href="{% url "pdi_topics" %}">
+         {% elif rol == "pas" %}
+         <a href="{% url "pas_topics" %}">
+         {% elif rol == "student" %}
+         <a href="{% url "student_topics" %}">
+         {% endif %}
+         Consultes</a>
+       </li>
+       <li {% if section == "ask_faq" %}class="selected"{% endif %}>
+         {% if rol == "pdi" %}
+         <a href="{% url "pdi_ask" %}">
+         {% elif rol == "pas" %}
+         <a href="{% url "pas_ask" %}">
+         {% elif rol == "student" %}
+         <a href="{% url "student_ask" %}">
+         {% endif %}
+         Nova consulta</a>
+       </li>
+         {% if rol != "student" %}
+       <li {% if section == "ranking" %}class="selected"{% endif %}>
+         {% if rol == "pdi" %}
+         <a href="{% url "pdi_ranking" %}">
+         {% elif rol == "pas" %}
+         <a href="{% url "pas_ranking" %}">
+         {% endif %}
+         Rànquing</a>
+       </li>
+         {% endif %}
+       <li {% if section == "profile" %}class="selected"{% endif %}>
+         {% if rol == "pdi" %}
+         <a href="{% url "pdi_profile" request.user.pdi.pk }">
+         {% elif rol == "pas" %}
+         <a href="{% url "pas_profile" request.user.pas.pk %}">
+         {% elif rol == "student" %}
+         <a href="{% url "student_profile" prequest.user.student.pk %}">
+         {% endif %}Perfil</a>
+       </li>
+     </ul>
+  {% endif %}
+  <span class="user">
+   {% if request.user.is_authenticated %}
+     Hello {{ request.user.first_name }},
+     <a href="{% url 'logout' %}">Logout</a>
+   {% else %}
+     <a href="{% url 'login' %}">Log-in</a>
+   {% endif %}
+  </span>
+
+</div>
+ <div id="content">
+   {% block content %}
+   {% endblock %}
+ </div>
+</body>
+</html>
