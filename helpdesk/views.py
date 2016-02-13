@@ -24,14 +24,64 @@ def pdi_topics(request):
     return render(request,'helpdesk/topics.html', {'section': 'topics', 'rol' : 'pdi', 'table':table})
 
 @login_required
-def  pdi_new_topic_for_pas(request):
-    #TODO
-    None
+def pdi_new_topic_for_pas(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+
+        form = NewTopicForPas(request.POST, dynamic_choices=Department.objects.all())
+        # check whether it's valid:
+
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+
+            department = form.cleaned_data['department']
+            pas_set = department.pas_set.all()
+            title = form.cleaned_data["title"]
+            content = form.cleaned_data["content"]
+            priority = form.cleaned_data["priority"]
+
+            if(len(pas_set) == 1):
+                teacher = pas_set[0]
+                topic = Topic(title=title, content=content, priority=priority, receiver=teacher.user, author=request.user).save()
+                return HttpResponseRedirect('/helpdesk/pdi/topics')
+            else:
+                topic = Topic(title=title, content=content, priority=priority, author=request.user)
+                topic.save()
+                request.session["topic"] = topic.id
+                request.session["department"] = department.id
+                return HttpResponseRedirect('/helpdesk/pdi/ask/employee')
+
+    # if a GET (or any other method) we'll create a blank form
+    departments = Department.objects.all()
+    form = NewTopicForPas(dynamic_choices=departments)
+
+    return render(request, 'helpdesk/create_topic_for_pas.html', {'rol':'pdi','form': form})
 
 @login_required
 def pdi_choose_pas(request):
-    #TODO
-    None
+    # if this is a POST request we need to process the form data
+    department = Department.objects.get(pk=request.session['department'])
+    teachers = department.pas_set.all()
+
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = EmployeeChooser(request.POST, dynamic_choices=teachers)
+        # check whether it's valid:
+
+        if form.is_valid():
+            teacher = form.cleaned_data["employee"]
+            topic = Topic.objects.get(pk=request.session['topic'])
+            topic.receiver = teacher.user
+            topic.save()
+            return HttpResponseRedirect('/helpdesk/pdi/topics')
+
+
+    # if a GET (or any other method) we'll create a blank form
+    form = EmployeeChooser(dynamic_choices=teachers)
+    return render(request, 'helpdesk/choose_teacher_pas.html', {'rol': 'pdi', 'form': form})
 
 @login_required
 def pdi_ask_faq(request):
@@ -80,8 +130,6 @@ def pdi_profile(request):
         return HttpResponse('Unauthorized', status=401)
     return render(request,'helpdesk/pdi_profile.html', {'section': 'profile', 'rol' : 'pdi'})
 
-
-
 @login_required
 def pas_topics(request):
     try:
@@ -90,16 +138,66 @@ def pas_topics(request):
         return HttpResponse('Unauthorized', status=401)
     return render(request,'helpdesk/topics.html', {'section': 'topics', 'rol' : 'pas'})
 
-
 @login_required
 def  pas_new_topic_for_pas(request):
-    #TODO
-    None
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+
+        form = NewTopicForPas(request.POST, dynamic_choices=Department.objects.all())
+        # check whether it's valid:
+
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+
+            department = form.cleaned_data['department']
+            pas_set = department.pas_set.all()
+            title = form.cleaned_data["title"]
+            content = form.cleaned_data["content"]
+            priority = form.cleaned_data["priority"]
+
+            if(len(pas_set) == 1):
+                teacher = pas_set[0]
+                topic = Topic(title=title, content=content, priority=priority, receiver=teacher.user, author=request.user).save()
+                return HttpResponseRedirect('/helpdesk/pas/topics')
+            else:
+                topic = Topic(title=title, content=content, priority=priority, author=request.user)
+                topic.save()
+                request.session["topic"] = topic.id
+                request.session["department"] = department.id
+                return HttpResponseRedirect('/helpdesk/pas/ask/employee')
+
+    # if a GET (or any other method) we'll create a blank form
+    departments = Department.objects.all()
+    form = NewTopicForPas(dynamic_choices=departments)
+
+    return render(request, 'helpdesk/create_topic_for_pas.html', {'rol':'pas','form': form})
 
 @login_required
 def pas_choose_pas(request):
-    #TODO
-    None
+    # if this is a POST request we need to process the form data
+    department = Department.objects.get(pk=request.session['department'])
+    teachers = department.pas_set.all()
+
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = EmployeeChooser(request.POST, dynamic_choices=teachers)
+        # check whether it's valid:
+
+        if form.is_valid():
+            teacher = form.cleaned_data["employee"]
+            topic = Topic.objects.get(pk=request.session['topic'])
+            topic.receiver = teacher.user
+            topic.save()
+            return HttpResponseRedirect('/helpdesk/pas/topics')
+
+
+    # if a GET (or any other method) we'll create a blank form
+    form = EmployeeChooser(dynamic_choices=teachers)
+    return render(request, 'helpdesk/choose_teacher_pas.html', {'rol': 'pas', 'form': form})
+
 
 @login_required
 def pas_ask_faq(request):
@@ -283,9 +381,6 @@ def  student_choose_pas(request):
 
     # if a GET (or any other method) we'll create a blank form
     form = EmployeeChooser(dynamic_choices=teachers)
-
-    print form
-
     return render(request, 'helpdesk/choose_teacher_pas.html', {'rol': 'student', 'form': form})
 
 @login_required
