@@ -155,7 +155,9 @@ def  student_new_topic_for_pdi(request):
         # create a form instance and populate it with data from the request:
         form = NewTopicForPdi(request.POST)
         # check whether it's valid:
+        form
         if form.is_valid():
+
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
@@ -172,7 +174,7 @@ def  student_new_topic_for_pdi(request):
                     teachers.append(pdi.pk, pdi.user.username)
 
                 form = TeacherChooser(teachers)
-                return render(request, 'choose_teacher', {'form': form})
+                return render(request, 'choose_teacher.html', {'rol':'student', 'form': form})
         else:
             form = NewTopicForPdi()
 
@@ -184,7 +186,7 @@ def  student_new_topic_for_pdi(request):
 
     form = NewTopicForPdi(subjects)
 
-    return render(request, 'helpdesk/create_topic_for_pdi.html', {'form': form})
+    return render(request, 'helpdesk/create_topic_for_pdi.html', {'rol':'student','form': form})
 
 @login_required
 def  student_new_topic_for_pas(request):
