@@ -1,0 +1,12 @@
+django==1.9
+django-bootstrap3
+djangorestframework
+python-daemon
+pika==0.9.8
+Sphinx
+Pillow==2.9.0
+dj_static
+dj_database_url
+psycopg2
+six==1.9.0
+django-tables2
