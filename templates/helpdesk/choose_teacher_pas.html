@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<form {% if rol == "pdi" %} action="/helpdesk/pdi/ask/employee/" {% elif rol == "student" %} action="/helpdesk/student/ask/pas/employee/" {% elif rol == "pas" %} action="/helpdesk/pas/ask/employee/" {% endif %}  method="post">
+    {% csrf_token %}
+    {{ form.as_table }}
+    <input type="submit" value="Submit" />
+</form>
+
+{% endblock content %}

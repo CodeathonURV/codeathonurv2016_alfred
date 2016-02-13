@@ -32,6 +32,9 @@ urlpatterns = [
     url(r'^student/ask/pas/$', views.student_new_topic_for_pas, name='student_new_topic_pas'),
     url(r'^student/ask/pdi/$', views.student_new_topic_for_pdi, name='student_new_topic_pdi'),
 
+    url(r'^pdi/ask/employee/$', views.pdi_choose_pas, name='pdi_choose_employee'),
+    url(r'^pas/ask/employee/$', views.pas_choose_pas, name='pas_choose_employee'),
     url(r'^student/ask/pdi/teacher/$', views.student_choose_teacher, name='student_choose_teacher'),
+    url(r'^student/ask/pas/employee/$', views.student_choose_pas, name='student_choose_pas'),
 
 ]
