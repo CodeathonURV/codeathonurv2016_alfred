@@ -24,9 +24,9 @@ urlpatterns = [
     url(r'^pdi/ranking/$', views.pdi_ranking, name='pdi_ranking'),
     url(r'^pas/ranking/$', views.pas_ranking, name='pas_ranking'),
 
-    url(r'^pdi/profile/(?P<pk>\d+)/$', views.pdi_profile, name='pdi_profile'),
-    url(r'^pas/profile/(?P<pk>\d+)/$', views.pas_profile, name='pas_profile'),
-    url(r'^student/profile/(?P<pk>\d+)/$', views.student_profile, name='student_profile'),
+    url(r'^pdi/profile/(?P<pk>[0-9]+)/$', views.pdi_profile, name='pdi_profile'),
+    url(r'^pas/profile/(?P<pk>[0-9]+)/$', views.pas_profile, name='pas_profile'),
+    url(r'^student/profile/(?P<pk>[0-9]+)/$', views.student_profile, name='student_profile'),
 
     url(r'^pdi/ask/$', views.pdi_new_topic_for_pas, name='pdi_new_topic'),
     url(r'^pas/ask/$', views.pas_new_topic_for_pas, name='pas_new_topic'),

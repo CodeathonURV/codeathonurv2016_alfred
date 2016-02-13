@@ -24,7 +24,7 @@
 </head>
 
 	<header>
-		<img src="{% static 'helpdesk/img/logo.png' %}" width="140">
+		<a href="/"><img src="{% static 'helpdesk/img/logo.png' %}" width="180"></a>
 		<nav>
           <a  {% if rol == "pdi" %}
           href="{% url "pdi_topics" %}"
@@ -64,7 +64,7 @@
 
 		</nav>
 		<input type="checkbox" id="menu">
-				<label for="menu"><img class="imenu" src="{% static 'helpdesk/img/menu.png' %}" width="70"></label>
+				<label for="menu"><img class="imenu" src="{% static 'helpdesk/img/menu.png' %}" width="100"></label>
 
 					<ul class="nav2">
 					<li>          <a  {% if rol == "pdi" %}
@@ -92,11 +92,11 @@
          >Rànquing</a>
        </li> {% endif %}
 					<li><a 	{% if rol == "pdi" %}
-         href="{% url "pdi_profile" request.user.pdi.pk }"
+         href="{% url "pdi_profile" pk=request.user.pdi.pk %}"
          {% elif rol == "pas" %}
-         href="{% url "pas_profile" request.user.pas.pk %}"
+         href="{% url "pas_profile" pk=request.user.pas.pk %}"
          {% elif rol == "student" %}
-         href="{% url "student_profile" request.user.student.pk %}"
+         href="{% url "student_profile" pk=request.user.student.pk %}"
          {% endif %}{% if section == "profile" %}class="selected"{% endif %}
             >Perfil</a></li>
 					<img src="{% static 'helpdesk/img/urv.png' %}" width="80">
