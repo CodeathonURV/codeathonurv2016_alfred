@@ -4,10 +4,9 @@
 
 
 <form {% if rol == "pdi" %} action="/helpdesk/pdi/ask/" {% elif rol == "student" %} action="/helpdesk/student/ask/pas/" {% elif rol == "pas" %} action="/helpdesk/pas/ask/" {% endif %}  method="post">
-    {% csrf_token %}
-    {{ form.path }}
-    {{ form.as_table }}
-    <input type="submit" value="Submit" />
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  {% buttons submit='OK' reset='Reset'  %}{% endbuttons %}
 </form>
 
-{% endblock content %}
+{% endblock %}

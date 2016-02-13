@@ -2,11 +2,10 @@
 
 {% block content %}
 
-
 <form {% if rol == "pdi" %} action="/helpdesk/pdi/ask/teacher/" {% elif rol == "student" %} action="/helpdesk/student/ask/pdi/teacher/" {% elif rol == "pas" %} action="/helpdesk/pas/ask/teacher/" {% endif %}  method="post">
-    {% csrf_token %}
-    {{ form.as_table }}
-    <input type="submit" value="Submit" />
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  {% buttons submit='OK' reset="Reset" %}{% endbuttons %}
 </form>
 
-{% endblock content %}
+{% endblock %}

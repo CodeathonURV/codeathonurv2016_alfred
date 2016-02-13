@@ -10,7 +10,7 @@ from helpdesk.tables import *
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from .forms import *
-
+from django_tables2   import RequestConfig
 # Create your views here.
 @login_required
 def pdi_topics(request):
@@ -21,6 +21,7 @@ def pdi_topics(request):
     table = TopicsTable(Topic.objects.filter(author__id=request.user.id))
     # topic_author = Topic.objects.filter(author__id=request.user.id)
     # topic_receiver = Topic.objects.filter(receiver__id=request.user.id)
+    RequestConfig(request).configure(table)
     return render(request,'helpdesk/topics.html', {'section': 'topics', 'rol' : 'pdi', 'table':table})
 
 @login_required
@@ -256,6 +257,7 @@ def student_topics(request):
     except:
         return HttpResponse('Unauthorized', status=401)
     table = TopicsTable(Topic.objects.filter(author__id=request.user.id))
+    RequestConfig(request).configure(table)
     return render(request,'helpdesk/topics.html', {'section': 'topics', 'rol':'student', 'table':table})
 
 @login_required
