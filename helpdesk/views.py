@@ -20,8 +20,7 @@ def pdi_topics(request):
     table = TopicsTable(Topic.objects.filter(author__id=request.user.id))
     # topic_author = Topic.objects.filter(author__id=request.user.id)
     # topic_receiver = Topic.objects.filter(receiver__id=request.user.id)
-    return render(request,'helpdesk/topics.html', {'section': 'topics', 'rol' : 'pdi',
-                                                    'table':table})
+    return render(request,'helpdesk/topics.html', {'section': 'topics', 'rol' : 'pdi', 'table':table})
 
 @login_required
 def  pdi_new_topic_for_pas(request):
@@ -174,6 +173,8 @@ def  student_new_topic_for_pdi(request):
 
                 form = TeacherChooser(teachers)
                 return render(request, 'choose_teacher', {'form': form})
+        else:
+            form = NewTopicForPdi()
 
     # if a GET (or any other method) we'll create a blank form
     subjects = list()
@@ -225,4 +226,3 @@ def student_profile(request):
 
     #TODO
     return render(request,'helpdesk/student_profile.html', {'form': form, 'section': 'profile', 'rol' : 'student'})
-

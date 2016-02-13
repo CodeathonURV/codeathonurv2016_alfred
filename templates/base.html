@@ -39,11 +39,11 @@
        </li>
        <li {% if section == "ask_faq" %}class="selected"{% endif %}>
          {% if rol == "pdi" %}
-         <a href="{% url "pdi_ask" %}">
+         <a href="{% url "pdi_new_topic" %}">
          {% elif rol == "pas" %}
-         <a href="{% url "pas_ask" %}">
+         <a href="{% url "pas_new_topic" %}">
          {% elif rol == "student" %}
-         <a href="{% url "student_ask" %}">
+         <a href="{% url "student_new_topic_pdi" %}">
          {% endif %}
          Nova consulta</a>
        </li>
@@ -63,7 +63,7 @@
          {% elif rol == "pas" %}
          <a href="{% url "pas_profile" request.user.pas.pk %}">
          {% elif rol == "student" %}
-         <a href="{% url "student_profile" prequest.user.student.pk %}">
+         <a href="{% url "student_profile" request.user.student.pk %}">
          {% endif %}Perfil</a>
        </li>
      </ul>
