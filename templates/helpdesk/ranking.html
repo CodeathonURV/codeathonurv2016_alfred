@@ -6,17 +6,17 @@
 <div class="container espai">
      <div>
         <center>
-       <button type="button" class="btn btn-info boto"><a href="/helpdesk/ranking/?user_type=pdi"  {% if user_type == "pdi" %}class="selected"{% endif %}>PDI Ranking</a></button>
-        <button type="button" class="btn btn-info boto"><a href="/helpdesk/ranking/?user_type=pas" {% if user_type == "pas" %}class="selected"{% endif %}>PAS Ranking</a></button>
+       <a href="/helpdesk/ranking/?user_type=pdi"  {% if user_type == "pdi" %}class="selected"{% endif %}><button type="button" class="btn btn-info boto">PDI Rànking</button></a>
+        <a href="/helpdesk/ranking/?user_type=pas" {% if user_type == "pas" %}class="selected"{% endif %}><button type="button" class="btn btn-info boto">PAS Rànking</button></a>
     </center>
      </div>
      <center>
-        <h1>Ranking</h1>
+        <h1>Rànking</h1>
         <div class="titol"></div>
     </center>
      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
         <div class="panel quadre-ranking espai">
-            <p class="titol-ranking">Closed Tickets Ranking</p>
+            <p class="titol-ranking">Els més resolutius</p>
             {%  for entry in closed_ranking %}
              <p class="descripcion">{{ forloop.counter }}. {{ entry.0.user.username }} - {{ entry.0.department.name }}</p>
             {% endfor %}
@@ -25,7 +25,7 @@
 
     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
         <div class="panel quadre-ranking espai">
-            <p class="titol-ranking">Speed Ranking</p>
+            <p class="titol-ranking">Els més ràpids</p>
             {%  for entry in speed_ranking %}
              <p class="descripcion">{{ forloop.counter }}. {{ entry.0.user.username }} - {{ entry.0.department.name }}</p>
             {% endfor %}
@@ -34,7 +34,7 @@
 
     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
         <div class="panel quadre-ranking espai">
-             <p class="titol-ranking">Reputation Ranking</p>
+             <p class="titol-ranking">Els més valorats</p>
             {%  for entry in reputation_ranking %}
             <p class="descripcion">{{ forloop.counter }}. {{ entry.0.user.username }} - {{ entry.0.department.name }}</p>
             {% endfor %}
