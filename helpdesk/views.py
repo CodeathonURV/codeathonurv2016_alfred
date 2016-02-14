@@ -227,11 +227,25 @@ def pas_ranking(request):
         reputation_ranking[pas_user] = Comment.objects.filter(author=pas_user.user).aggregate(Avg("rating")).values()[0]
         closed_ranking[pas_user] = Topic.objects.filter(receiver=pas_user.user, status='CLOSED').count()
 
+        topics[pas_user] = Topic.objects.filter(receiver=pas_user.user)
+        time = 0
+        counter = 0
+        for topic in topics[pas_user]:
+            topic_comments = Comment.objects.filter(topic=topic, author=pas_user.user).order_by('date_published')
+            if(topic_comments.count()):
+                time += (Comment.objects.filter(topic=topic.id).order_by('date_published')[0].date_published - topic.creation_date).total_seconds()
+                counter += 1
 
+        if(counter!=0):
+            speed_ranking[pas_user] = time / counter
 
+    import operator
 
+    reputation = sorted(reputation_ranking.items(), key=operator.itemgetter(1), reverse=True)
+    speed = sorted(speed_ranking.items(), key=operator.itemgetter(1), reverse=True)
+    closed = sorted(closed_ranking.items(), key=operator.itemgetter(1), reverse=True)
 
-    return render(request,'helpdesk/ranking.html', {'section': 'ranking', 'rol' : 'pas', 'reputation_ranking':reputation_ranking, 'closed_ranking' : closed_ranking, 'speed_ranking': speed_ranking})
+    return render(request,'helpdesk/ranking.html', {'section': 'ranking', 'rol' : 'pas', 'reputation_ranking':reputation, 'closed_ranking' : closed, 'speed_ranking': speed})
 
 @login_required
 def pas_profile(request, pk):
