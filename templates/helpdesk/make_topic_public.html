@@ -5,16 +5,23 @@
 
 {% block content %}
 
+<center>
+	<h1>Confirmació</h1>
+	<div class="titol"></div>
+</center>
 
-
-<div>
-<p>Topic title: {{topic.title}}</p>
-<p> Do you want to make public the topic after close? </p>
-<form action="/helpdesk/topics/{{topic.id}}/close/" method="POST">
+<div class="container espai">
+	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+		<div class="alert alert-success">
+			<p><b style="font-size:16px;">Pregunta:</b> {{topic.title}}</p><br>
+			<p> Vols fer publica la teva pregunta? </p>
+			<form action="/helpdesk/topics/{{topic.id}}/close/" method="POST">
     {% csrf_token %}
-    <input type="checkbox" name="is_public"> Make public <br>
-    <input type="submit" value="Close Ticket"/>
-    <a href="/helpdesk/topics/{{topic.id}}"><button type="button"/>Cancel</button></a>
-</form>
+
+    <input type="checkbox" name="is_public"> Make public <br><br>
+    <input type="submit" class="btn btn-success" value="Close Ticket"/>
+    <a href="/helpdesk/topics/{{topic.id}}"><button type="button" class="btn btn-danger"/>Cancel</button></a>
+</form><br>
 </div>
+</div></div>
 {% endblock %}

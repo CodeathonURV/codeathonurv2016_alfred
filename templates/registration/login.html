@@ -1,22 +1,58 @@
-{% extends "base.html" %}
-{% block title %}Log-in{% endblock %}
-{% block content %}
-   <h1>Log-in</h1>
-   {% if form.errors %}
-     <p>
-       Your username and password didn't match.
-       Please try again.
-     </p>
-   {% else %}
-     <p>Please, use the following form to log-in:</p>
-   {% endif %}
-<div class="login-form">
-  <form action="{% url 'login' %}" method="post">
-    <p><a href="{% url 'password_reset' %}">Forgotten your password?</a></p>
-    {{ form.as_p }}
-    {% csrf_token %}
-    <input type="hidden" name="next" value="{{ next }}" />
-    <p><input type="submit" value="Log-in"></p>
-  </form>
-</div>
-{% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+ <title>{% block title %}{% endblock %}</title>
+
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+
+{% load staticfiles %}
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="{% static 'helpdesk/js/jquery.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'helpdesk/css/styles.css' %}" />
+
+</head>
+  <body class="log-in">
+    <a href="/"><img src="{% static 'helpdesk/img/logo_alfred.png' %}" width="70%" class="logotip" ></a>
+
+     {% if form.errors %}
+       <p style="color:white;">
+         El teu nom d'usuari i contrasenya no coincideixen.
+         Siusplau torna-ho a provar.
+       </p>
+     {% else %}
+      
+     {% endif %}
+  <div class="container">
+    
+    <div class="col-lg-4 col-md-4 col-sm-8 col-xs-12 col-lg-offset-4 col-md-offset-4 col-sm-offset-2">
+    <div class="login-form">
+      <form action="{% url 'login' %}" method="post">
+       
+       {% bootstrap_form form %}
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}" />
+        <p><a href="{% url 'password_reset' %}">Has oblidat la teva contrassenya?</a></p>
+        <p><input class="btn btn-success" type="submit" value="Iniciar Sessió"></p>
+
+      </form>
+    </div>
+    </div>
+
+  </div>
+  </body>
+  <div class="footerdos">
+    <p>© CODEATHON URV 2016 - DJANGOG</p>
+  </div>
+</html>
+
