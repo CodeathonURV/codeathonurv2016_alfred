@@ -33,7 +33,7 @@
          {% elif rol == "pas" %}
          href="{% url "pas_topics" %}"
          {% elif rol == "student" %}
-         href="{% url "student_topics" %}"
+         href="{% url 'student_topics' %}"
          {% endif %}{% if section == "topics" %}class="selected"{% endif %}
          >Consultes</a>
 
@@ -51,9 +51,9 @@
             <a 	{% if rol == "pdi" %}
          href="{% url "pdi_profile" pk=request.user.pdi.pk %}"
          {% elif rol == "pas" %}
-         href="{% url "pas_profile" pk=request.user.pas.pk %}"
+         href="{% url 'pas_profile' pk=request.user.pas.pk %}"
          {% elif rol == "student" %}
-         href="{% url "student_profile" pk=request.user.student.pk %}"
+         href="{% url 'student_profile' pk=request.user.student.pk %}"
          {% endif %}{% if section == "profile" %}class="selected"{% endif %}
             >Perfil</a>
 
@@ -67,36 +67,36 @@
 
 					<ul class="nav2">
 					<li>          <a  {% if rol == "pdi" %}
-          href="{% url "pdi_topics" %}"
-         {% elif rol == "pas" %}
+          href="{% url 'pdi_topics' %}"
+         {% elif rol == 'pas' %}
          href="{% url "pas_topics" %}"
          {% elif rol == "student" %}
          href="{% url "student_topics" %}"
          {% endif %}{% if section == "topics" %}class="selected"{% endif %}
          >Consultes</a></li>
 					<li>            <a {% if rol == "pdi" %}
-         href="{% url "pdi_new_topic" %}"
+         href="{% url 'pdi_new_topic' %}"
          {% elif rol == "pas" %}
-         href="{% url "pas_new_topic" %}"
+         href="{% url 'pas_new_topic' %}"
          {% elif rol == "student" %}
          href="{% url "student_new_topic_pdi" %}"
          {% endif %}{% if section == "ask_faq" %}class="selected"{% endif %}
          >Nova consulta</a></li>
 		<li>
-            <a {% if rol != "" %} href="{% url "ranking" %}" {% endif %} {% if section == "ranking" %}class="selected"{% endif %}>Rànquing</a>
+            <a {% if rol != "" %} href="{% url 'ranking' %}" {% endif %} {% if section == "ranking" %}class="selected"{% endif %}>Rànquing</a>
        </li>
 					<li><a 	{% if rol == "pdi" %}
-         href="{% url "pdi_profile" pk=request.user.pdi.pk %}"
+         href="{% url 'pdi_profile' pk=request.user.pdi.pk %}"
          {% elif rol == "pas" %}
-         href="{% url "pas_profile" pk=request.user.pas.pk %}"
+         href="{% url 'pas_profile' pk=request.user.pas.pk %}"
          {% elif rol == "student" %}
-         href="{% url "student_profile" pk=request.user.student.pk %}"
+         href="{% url 'student_profile' pk=request.user.student.pk %}"
          {% endif %}{% if section == "profile" %}class="selected"{% endif %}
             >Perfil</a></li>
         {% if request.user.is_authenticated %}
 
         <li>
-            <a {% if rol != "" %} href="{% url "logout" %}" {% endif %}>Logout</a>
+            <a {% if rol != "" %} href="{% url 'logout' %}" {% endif %}>Logout</a>
         </li>
 
         {% endif %}
