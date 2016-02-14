@@ -1,6 +1,34 @@
 {% extends "base.html" %}
-   {% block title %}Dashboard{% endblock %}
-   {% block content %}
-     <h1>Dashboard</h1>
-     <p>Welcome to your dashboard.</p>
+{% load querystring from django_tables2 %}
+<!--{% load trans blocktrans from i18n %}-->
+{% load bootstrap3 %}
+
+{% block content %}
+
+
+
+<div>
+<p>Topic title: {{topic.title}}</p>
+
+
+<p>
+  Publication Data: {{topic.creation_date}} Priority: {{topic.priority}} Status: {{topic.status}}
+</p>
+</div>
+<div>
+<p>
+  Author: {{topic.author}}
+</p>
+<p>
+  Content: {{topic.content}}
+</p>
+</div>
+<div>
+{% for comment in comments %}
+  <p>Coment author: {{comment.author}}</p>
+  <p>Comment content: {{comment.content}}</p>
+  <p></p>
+  <p></p>
+{% endfor %}
+</div>
 {% endblock %}

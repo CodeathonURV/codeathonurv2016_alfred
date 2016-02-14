@@ -13,9 +13,7 @@ urlpatterns = [
     url(r'^pas/topics/$', views.pas_topics, name='pas_topics'),
     url(r'^student/topics/$', views.student_topics, name='student_topics'),
 
-    url(r'^pdi/topics/(?P<topic_id>[0-9]+)$', views.pdi_topic, name='pdi_topic'),
-    url(r'^pas/topics/(?P<topic_id>[0-9]+)$', views.pas_topic, name='pas_topic'),
-    url(r'^student/topics/(?P<topic_id>[0-9]+)$', views.student_topic, name='student_topic'),
+    url(r'^topics/(?P<topic_id>[0-9]+)$', views.topic, name='topic'),
 
     url(r'^pdi/ask_faq/$', views.pdi_ask_faq, name='pdi_ask_faq'),
     url(r'^pas/ask_faq/$', views.pas_ask_faq, name='pas_ask_faq'),
