@@ -2,9 +2,24 @@
 
 {% block content %}
 
-<form action="" method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Update" />
-</form>
+<p>
+First Name: {{ pas.user.first_name }}
+</p>
 
-{% endblock content %}
+<p>
+Last Name: {{ pas.user.last_name }}
+</p>
+
+<p>
+Email: {{ pas.user.email }}
+</p>
+
+<p>
+Department: {{ pas.department.name }}
+</p>
+
+<p>
+Task: {{ pas.task }}
+</p>
+
+{% endblock %}

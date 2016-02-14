@@ -2,9 +2,35 @@
 
 {% block content %}
 
-<form action="" method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Update" />
-</form>
 
-{% endblock content %}
+<p>
+First Name: {{ pdi.user.first_name }}
+</p>
+
+<p>
+Last Name: {{ pdi.user.last_name }}
+</p>
+
+<p>
+Email: {{ pdi.user.email }}
+</p>
+
+<p>
+Knowledge Area: {{ pdi.knowledge_area }}
+</p>
+
+<p>
+Office: {{ pdi.office }}
+</p>
+
+Subjects:
+    <ul>
+{% for subject in subjects %}
+    <li>
+        <p>
+            {{ subject.title }}
+        </p>
+    </li>
+{% endfor %}
+    </ul>
+{% endblock %}

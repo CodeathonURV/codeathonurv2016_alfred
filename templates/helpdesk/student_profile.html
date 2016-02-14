@@ -2,14 +2,28 @@
 
 {% block content %}
 
-<form action="" method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Update" />
-</form>
 
-<script>
+<p>
+First Name: {{ student.user.first_name }}
+</p>
 
-$( "#id_subjects" ) .attr('disabled','disabled');
+<p>
+Last Name: {{ student.user.last_name }}
+</p>
 
-</script>
-{% endblock content %}
+<p>
+Email: {{ student.user.email }}
+</p>
+
+Subjects:
+    <ul>
+{% for subject in subjects %}
+    <li>
+        <p>
+            {{ subject.title }}
+        </p>
+    </li>
+{% endfor %}
+    </ul>
+
+{% endblock %}
