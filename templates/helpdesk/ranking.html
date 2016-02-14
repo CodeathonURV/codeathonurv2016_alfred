@@ -17,8 +17,9 @@
      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
         <div class="panel quadre-ranking espai">
             <p class="titol-ranking">Closed Tickets Ranking</p>
+
             {%  for entry in closed_ranking %}
-             <p class="descripcion">{{ forloop.counter }}. {{ entry.0.user.username }} - {{ entry.0.department.name }}</p>
+             <p class="descripcion">{{ forloop.counter }}. {{ entry.0.user.first_name }} {{ entry.0.user.last_name }} {% if user_type == "pas" %} - {{ entry.0.department.name }}{% endif %}</p>
             {% endfor %}
         </div>
     </div>
@@ -27,7 +28,7 @@
         <div class="panel quadre-ranking espai">
             <p class="titol-ranking">Speed Ranking</p>
             {%  for entry in speed_ranking %}
-             <p class="descripcion">{{ forloop.counter }}. {{ entry.0.user.username }} - {{ entry.0.department.name }}</p>
+             <p class="descripcion">{{ forloop.counter }}. {{ entry.0.user.first_name }} {{ entry.0.user.last_name }} {% if user_type == "pas" %} - {{ entry.0.department.name }} {% endif %}</p>
             {% endfor %}
         </div>
     </div>
@@ -36,7 +37,7 @@
         <div class="panel quadre-ranking espai">
              <p class="titol-ranking">Reputation Ranking</p>
             {%  for entry in reputation_ranking %}
-            <p class="descripcion">{{ forloop.counter }}. {{ entry.0.user.username }} - {{ entry.0.department.name }}</p>
+            <p class="descripcion">{{ forloop.counter }}. {{ entry.0.user.first_name }} {{ entry.0.user.last_name }} {% if user_type == "pas" %} - {{ entry.0.department.name }} {% endif %}</p>
             {% endfor %}
         </div>
     </div>
