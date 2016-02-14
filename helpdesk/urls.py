@@ -35,4 +35,6 @@ urlpatterns = [
     url(r'^student/ask/pdi/teacher/$', views.student_choose_teacher, name='student_choose_teacher'),
     url(r'^student/ask/pas/employee/$', views.student_choose_pas, name='student_choose_pas'),
 
+    url(r'^vote/$', views.vote_comment, name='vote_comment'),
+
 ]

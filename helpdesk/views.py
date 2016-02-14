@@ -465,3 +465,20 @@ def student_profile(request, pk):
     subjects = student.subjects.all()
 
     return render(request,'helpdesk/student_profile.html', {'student': student, 'subjects': subjects, 'section': 'profile', 'rol' : 'student'})
+
+@login_required
+def vote_comment(request):
+
+    comment_id = None
+    if request.method == 'GET':
+        comment_id = request.GET['comment_id']
+
+    rating = 0
+    if comment_id:
+        comment = Comment.objects.get(id=int(comment_id))
+        if comment:
+            rating = comment.rating + 1
+            comment.rating =  rating
+            comment.save()
+
+    return HttpResponse(rating)
