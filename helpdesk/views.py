@@ -82,14 +82,6 @@ def pdi_choose_pas(request):
     return render(request, 'helpdesk/choose_teacher_pas.html', {'rol': 'pdi', 'form': form})
 
 @login_required
-def pdi_ask_faq(request):
-    try:
-        request.user.pdi
-    except:
-        return HttpResponse('Unauthorized', status=401)
-    return render(request,'helpdesk/ask_faq.html', {'section': 'ask_faq', 'rol' : 'pdi'})
-
-@login_required
 def pdi_ask(request):
     try:
         request.user.pdi
@@ -179,15 +171,6 @@ def pas_choose_pas(request):
     form = EmployeeChooser(dynamic_choices=teachers)
     return render(request, 'helpdesk/choose_teacher_pas.html', {'rol': 'pas', 'form': form})
 
-
-@login_required
-def pas_ask_faq(request):
-    try:
-        request.user.pas
-    except:
-        return HttpResponse('Unauthorized', status=401)
-    return render(request,'helpdesk/ask_faq.html', {'section': 'ask_faq', 'rol' : 'pas'})
-
 @login_required
 def pas_ask(request):
     try:
@@ -240,7 +223,21 @@ def ranking(request):
         speed = sorted(speed_ranking.items(), key=operator.itemgetter(1), reverse=True)
         closed = sorted(closed_ranking.items(), key=operator.itemgetter(1), reverse=True)
 
-        return render(request,'helpdesk/ranking.html', {'section': 'ranking', 'rol' : 'pas', 'user_type':user_type, 'reputation_ranking':reputation, 'closed_ranking' : closed, 'speed_ranking': speed})
+        try:
+            request.user.student
+            rol = 'student'
+        except:
+            try:
+                request.user.pdi
+                rol = 'pdi'
+            except:
+                    try:
+                        request.user.pas
+                        rol = 'pas'
+                    except:
+                        return HttpResponse('Unauthorized', status=401)
+
+        return render(request,'helpdesk/ranking.html', {'section': 'ranking', 'rol' : rol, 'user_type':user_type, 'reputation_ranking':reputation, 'closed_ranking' : closed, 'speed_ranking': speed})
 
 @login_required
 def pas_profile(request, pk):
@@ -390,15 +387,6 @@ def  student_choose_pas(request):
     return render(request, 'helpdesk/choose_teacher_pas.html', {'rol': 'student', 'form': form})
 
 @login_required
-def student_ask_faq(request):
-    try:
-        request.user.student
-    except:
-        return HttpResponse('Unauthorized', status=401)
-
-    return render(request,'helpdesk/ask_faq.html', {'section': 'ask_faq','rol' : 'student' })
-
-@login_required
 def get_queryset(request):
     result = ""
     query = request.GET.get('q')
@@ -416,13 +404,14 @@ def get_queryset(request):
             except Exception:
                 return HttpResponse('Unauthorized', status=401)
     if query:
-
         result = Topic.objects.filter(is_public=True).filter(Q(title__icontains=query)).order_by('last_update')
         print 'result', type(result), result
         subjects = result.filter(department=False)[:10]
         departments = result.filter(department=True)[:10]
         table = TopicsTable(result)
-    return render(request,'helpdesk/search.html', {'section': 'results', 'rol': rol, 'subjects' : subjects, 'departments' : departments  })
+        return render(request,'helpdesk/search.html', {'empty': False, 'section': 'ask_faq', 'rol': rol, 'subjects' : subjects, 'departments' : departments  })
+    else:
+        return render(request,'helpdesk/search.html', {'empty': True, 'section': 'ask_faq', 'rol': rol, 'subjects' : {}, 'departments' : {}  })
 
 @login_required
 def student_ask(request):
