@@ -102,7 +102,6 @@ def pdi_profile(request, pk):
 
     return render(request,'helpdesk/pdi_profile.html', {'pdi': pdi, 'subjects': subjects, 'section': 'profile', 'rol' : 'pdi'})
 
-
 @login_required
 def pas_topics(request):
     try:
@@ -112,7 +111,7 @@ def pas_topics(request):
     return render(request,'helpdesk/topics.html', {'section': 'topics', 'rol' : 'pas'})
 
 @login_required
-def  pas_new_topic_for_pas(request):
+def pas_new_topic_for_pas(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -440,14 +439,14 @@ def topic(request, topic_id):
     topic = Topic.objects.get(pk=topic_id)
     if request.method == "GET":
         comments = Comment.objects.filter(topic__id=topic_id).order_by('date_published')
-        return render(request,'helpdesk/topic.html', {'section': 'topic', 'rol' : rol, 'topic':topic, 'comments':comments})
+        form = NewComment()
+        return render(request,'helpdesk/topic.html', {'comment_form':form, 'section': 'topic', 'rol' : rol, 'topic':topic, 'comments':comments})
     if request.method == "POST":
         return render(request,'helpdesk/make_topic_public.html', {'section': 'topic', 'rol' : rol, 'topic':topic})
 
 @login_required
 def topic_close(request, topic_id):
     #TODO: Fix the way to assign roles to users.
-
     try:
         request.user.student
         rol = 'student'
@@ -467,7 +466,36 @@ def topic_close(request, topic_id):
     topic.status = "CLOSED"
     topic.save()
     comments = Comment.objects.filter(topic__id=topic_id).order_by('date_published')
-    return render(request,'helpdesk/topic.html', {'section': 'topic', 'rol' : rol, 'topic':topic, 'comments':comments})
+    form = NewComment()
+    return render(request,'helpdesk/topic.html', {'comment_form':form, 'section': 'topic', 'rol' : rol, 'topic':topic, 'comments':comments})
+
+@login_required
+def topic_comment(request, topic_id):
+    #TODO: Fix the way to assign roles to users.
+
+    try:
+        request.user.student
+        rol = 'student'
+    except Exception:
+        try:
+            request.user.pdi
+            rol = 'pdi'
+        except Exception:
+            try:
+                request.user.pas
+                rol = 'pas'
+            except Exception:
+                return HttpResponse('Unauthorized', status=401)
+
+    if request.method == 'POST':
+        form = NewComment(request.POST)
+
+        if form.is_valid():
+            topic = Topic.objects.get(pk=topic_id)
+            comment = Comment(content=form.cleaned_data['content'], author=request.user, topic=topic).save()
+
+    return HttpResponseRedirect('/helpdesk/topics/'+str(topic.id)+'/')
+
 
 @login_required
 def student_profile(request, pk):

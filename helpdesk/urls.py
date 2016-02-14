@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^student/topics/$', views.student_topics, name='student_topics'),
 
     url(r'^topics/(?P<topic_id>[0-9]+)/$', views.topic, name='topic'),
+    url(r'^topics/(?P<topic_id>[0-9]+)/comment/$', views.topic_comment, name='topic_comment'),
     url(r'^topics/(?P<topic_id>[0-9]+)/close/$', views.topic_close, name='topic_close'),
 
     url(r'^pdi/ask_faq/$', views.get_queryset, name='pdi_ask_faq'),

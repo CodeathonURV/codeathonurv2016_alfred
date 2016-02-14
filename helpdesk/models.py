@@ -70,7 +70,7 @@ class Topic(models.Model):
 
 class Comment(models.Model):
     content = models.TextField()
-    rating = models.IntegerField()
+    rating = models.IntegerField(null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comment_author')
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='comment_topic')
     date_published = models.DateTimeField('date_published', default=datetime.now)

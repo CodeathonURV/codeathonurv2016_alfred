@@ -8,9 +8,9 @@
 
 <center>
     <h1>Consultes obertes</h1>
-    <div class="titol"></div>
+    <div class="titol">
 </center>
-
+</div>
 <div class="container">
 {% if table.page %}
     <div class="table-container">
@@ -61,7 +61,9 @@
         {% bootstrap_pagination table.page url=request.get_full_path %}
         {#{ table.page|pagination }#}
     {% endblock pagination %}
+    </div>
 {% endif %}
+
 </div>
 </div>
-{% endblock content %}
+{% endblock %}

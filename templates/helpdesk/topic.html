@@ -14,13 +14,29 @@
 <p>
   Publication Data: {{topic.creation_date}} Priority: {{topic.priority}} Status: {{topic.status}}
 </p>
+
 {% if request.user.id == topic.author.id and topic.status != "CLOSED"  %}
 <form action="/helpdesk/topics/{{topic.id}}/" method="POST">
     {% csrf_token %}
     <input type="submit" value="Close Ticket" />
 </form>
 {% endif %}
+
 </div>
+
+
+<button type="button" id="reply_button">Reply</button>
+
+{% if topic.status != "CLOSED"  %}
+<div id="reply_container" style="display:none;">
+    <form action="/helpdesk/topics/{{topic.id}}/comment/" method="post">
+      {% csrf_token %}
+      {% bootstrap_form comment_form %}
+      {% buttons submit='OK' reset="Reset" %}{% endbuttons %}
+    </form>
+</div>
+{% endif %}
+
 <div>
 <p>
   Author: {{topic.author}}
@@ -37,7 +53,7 @@
 
   <strong id="rating_value">{{ comment.rating }}</strong> people like this category
 
-  {% if user.is_authenticated %}
+  {% if user.is_authenticated and request.user.id == topic.author.id %}
           <button id="rating" data-comid="{{comment.id}}" class="btn btn-primary" type="button">
           <span class="glyphicon glyphicon-thumbs-up"></span>
           Like
