@@ -14,6 +14,12 @@
 <p>
   Publication Data: {{topic.creation_date}} Priority: {{topic.priority}} Status: {{topic.status}}
 </p>
+{% if request.user.id == topic.author.id and topic.status != "CLOSED"  %}
+<form action="/helpdesk/topics/{{topic.id}}/" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Close Ticket" />
+</form>
+{% endif %}
 </div>
 <div>
 <p>

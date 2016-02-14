@@ -448,8 +448,35 @@ def topic(request, topic_id):
                 rol = 'pas'
             except Exception:
                 return HttpResponse('Unauthorized', status=401)
-
     topic = Topic.objects.get(pk=topic_id)
+    if request.method == "GET":
+        comments = Comment.objects.filter(topic__id=topic_id).order_by('date_published')
+        return render(request,'helpdesk/topic.html', {'section': 'topic', 'rol' : rol, 'topic':topic, 'comments':comments})
+    if request.method == "POST":
+        return render(request,'helpdesk/make_topic_public.html', {'section': 'topic', 'rol' : rol, 'topic':topic})
+
+@login_required
+def topic_close(request, topic_id):
+    #TODO: Fix the way to assign roles to users.
+
+    try:
+        request.user.student
+        rol = 'student'
+    except Exception:
+        try:
+            request.user.pdi
+            rol = 'pdi'
+        except Exception:
+            try:
+                request.user.pas
+                rol = 'pas'
+            except Exception:
+                return HttpResponse('Unauthorized', status=401)
+    topic = Topic.objects.get(pk=topic_id)
+    if "is_public" in request.POST.keys():
+        topic.is_public = True
+    topic.status = "CLOSED"
+    topic.save()
     comments = Comment.objects.filter(topic__id=topic_id).order_by('date_published')
     return render(request,'helpdesk/topic.html', {'section': 'topic', 'rol' : rol, 'topic':topic, 'comments':comments})
 

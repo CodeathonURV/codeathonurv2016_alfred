@@ -47,17 +47,17 @@ label{
 	color: white;
 	box-shadow: 0 5px 5px 0 rgba(0,0,0,0.50);
 	text-align: center;
-	
+
 }
 .nav2 a{
 	text-decoration: none;
 	color: white;
 	font-family: arial;
 }
-input[type="checkbox"]{
+input[type="checkbox"]#menu{
 	display: none;
 }
-input[type="checkbox"]:checked ~ .nav2{
+input[type="checkbox"]:checked#menu  ~ .nav2{
 margin-right:0px;
 }
 .nav2 li{
@@ -87,8 +87,8 @@ h1{
 	position: relative;
 	width: 350px;
 	font-weight: normal;
-	margin-top:20px; 
-	
+	margin-top:20px;
+
 }
 .titol{
 	border-top: 1px solid;
@@ -101,7 +101,7 @@ h1{
 h1 span{
 
 	padding: 0 20px;
-	
+
 }
 tr{
 	text-align: center;
@@ -153,4 +153,3 @@ footer{
 }
 
 }
-

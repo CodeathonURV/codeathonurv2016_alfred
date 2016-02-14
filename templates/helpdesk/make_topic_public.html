@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load querystring from django_tables2 %}
+<!--{% load trans blocktrans from i18n %}-->
+{% load bootstrap3 %}
+
+{% block content %}
+
+
+
+<div>
+<p>Topic title: {{topic.title}}</p>
+<p> Do you want to make public the topic after close? </p>
+<form action="/helpdesk/topics/{{topic.id}}/close/" method="POST">
+    {% csrf_token %}
+    <input type="checkbox" name="is_public"> Make public <br>
+    <input type="submit" value="Close Ticket"/>
+    <a href="/helpdesk/topics/{{topic.id}}"><button type="button"/>Cancel</button></a>
+</form>
+</div>
+{% endblock %}
