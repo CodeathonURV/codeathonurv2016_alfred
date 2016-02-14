@@ -24,10 +24,9 @@
 
 </div>
 
-
+{% if topic.status != "CLOSED"  %}
 <button type="button" id="reply_button">Reply</button>
 
-{% if topic.status != "CLOSED"  %}
 <div id="reply_container" style="display:none;">
     <form action="/helpdesk/topics/{{topic.id}}/comment/" method="post">
       {% csrf_token %}
