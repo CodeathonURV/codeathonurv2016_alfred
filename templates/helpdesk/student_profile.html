@@ -1,29 +1,37 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-
+<center>
+	<h1>Perfil</h1>
+	<div class="titol"></div>
+</center>
+<div class="container espai">
+	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 <p>
-First Name: {{ student.user.first_name }}
+<b>Nom:</b> {{ student.user.first_name }}
 </p>
 
 <p>
-Last Name: {{ student.user.last_name }}
+<b>Cognoms:</b> {{ student.user.last_name }}
 </p>
 
 <p>
-Email: {{ student.user.email }}
+<b>Correu:</b> {{ student.user.email }}
 </p>
-
-Subjects:
-    <ul>
-{% for subject in subjects %}
-    <li>
-        <p>
-            {{ subject.title }}
-        </p>
-    </li>
-{% endfor %}
-    </ul>
-
+</div>
+	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+		<p class="list-group-item default">
+		<b>Subjects:</b>
+   		<ul>
+			{% for subject in subjects %}
+    		<li>
+       			<p>
+        	 	   {{ subject.title }}
+        		</p>
+    		</li>
+		{% endfor %}
+    	</ul>
+    </p>
+	</div>
+</div>
 {% endblock %}

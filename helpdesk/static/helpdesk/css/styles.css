@@ -134,12 +134,56 @@ footer p{
 .quadre{
 	border: 1px solid #8B271B;
 }
+.quadre-ranking{
+	border: 1px solid #8B271B;
+}
+.quadre-ranking .descripcion{
+	font-size: 17px;
+}
 .autor{
 	padding-top: 10px;
 	font-size: 15px;
 }
+.fondo{
+	height: 300px;
+	background-color: #8B271B;
+}
+.buscar{
+	background: #fff;
+	border-radius: 6px;
+	height: 45px;
+	border-color:#ccc;
+	width: 380px;
+}
+.fondo h3{
+	padding-top: 60px;
+	font-size: 40px;
+	color: white;
+	font-family: arial;
+}
 
+.boto{
+	height: 60px;
+	margin: 10px;
+}
+.boto a{
+	color: white;
+	text-decoration: none;
 
+}
+.pregunta li{
+	list-style-type: none;
+}
+.pregunta a{
+	color:#8B271B;
+	text-decoration: none;
+	font-weight: bolder;
+}
+.titol-ranking{
+	font-size: 20px;
+	text-align: center;
+	border-bottom: 1px solid #8B271B;
+}
 
 /* DESKTOP VERSION */
 @media screen and (min-width: 777px){
@@ -154,7 +198,6 @@ label{
 
 
 
-
 }
 /* PHONE VERSION */
 @media screen and (max-width: 777px){
@@ -164,6 +207,7 @@ nav{
 footer{
 	font-size: 13px;
 }
+
 
 }
 

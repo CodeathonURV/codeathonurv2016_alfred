@@ -31,17 +31,18 @@
         </div>
     </div>
 
-  {% if request.user.id == topic.author.id and topic.status != "CLOSED"  %}
-  <form action="/helpdesk/topics/{{topic.id}}/" method="POST">
-    {% csrf_token %}
-    <input type="submit" value="Close Ticket" />
-  </form>
-  {% endif %}
-
 </div>
 
 {% if topic.status != "CLOSED"  %}
 <div class="container">
+
+  {% if request.user.id == topic.author.id and topic.status != "CLOSED"  %}
+      <form action="/helpdesk/topics/{{topic.id}}/" method="POST" style="margin-bottom: 10px;">
+        {% csrf_token %}
+        <input type="submit" class="btn btn-info" value="Tancar Ticket" />
+      </form>
+  {% endif %}
+
   <button type="button" id="reply_button" class="btn btn-info">Respondre</button>
 
   <div id="reply_container" style="display:none;"><br>
@@ -51,6 +52,7 @@
       {% buttons submit='OK' reset="Reset" %}{% endbuttons %}
     </form>
   </div>
+
 </div>
 {% endif %}
 <br>

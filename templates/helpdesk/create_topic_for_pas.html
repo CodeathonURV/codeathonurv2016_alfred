@@ -2,11 +2,16 @@
 {% load bootstrap3 %}
 {% block content %}
 
-
+<div class="container espai">
+	<center>
+		<h1>Crear Consulta</h1>
+		<div class="titol"></div>
+	</center>
 <form {% if rol == "pdi" %} action="/helpdesk/pdi/ask/" {% elif rol == "student" %} action="/helpdesk/student/ask/pas/" {% elif rol == "pas" %} action="/helpdesk/pas/ask/" {% endif %}  method="post">
   {% csrf_token %}
   {% bootstrap_form form %}
   {% buttons submit='OK' reset='Reset'  %}{% endbuttons %}
 </form>
+</div>
 
 {% endblock %}
