@@ -132,6 +132,12 @@ footer p{
 .quadre{
 	border: 1px solid #8B271B;
 }
+.quadre-ranking{
+	border: 1px solid #8B271B;
+}
+.quadre-ranking .descripcion{
+	font-size: 17px;
+}
 .autor{
 	padding-top: 10px;
 	font-size: 15px;
@@ -170,6 +176,11 @@ footer p{
 	color:#8B271B;
 	text-decoration: none;
 	font-weight: bolder;
+}
+.titol-ranking{
+	font-size: 20px;
+	text-align: center;
+	border-bottom: 1px solid #8B271B;
 }
 
 /* DESKTOP VERSION */
