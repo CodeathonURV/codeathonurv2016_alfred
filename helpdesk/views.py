@@ -11,6 +11,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from .forms import *
 from django_tables2   import RequestConfig
+
 # Create your views here.
 @login_required
 def pdi_topics(request):
@@ -95,20 +96,6 @@ def pdi_ask(request):
     except:
         return HttpResponse('Unauthorized', status=401)
     return render(request,'helpdesk/create_topic_for_pdi.html', {'section': 'ask', 'rol' : 'pdi'})
-
-
-@login_required
-def pdi_ranking(request):
-    try:
-        request.user.pdi
-    except:
-        return HttpResponse('Unauthorized', status=401)
-    pdi_users = Pdi.objects.all()
-    user_ranking = {}
-    for pdi_user in pdi_users:
-        user_ranking[pdi_user] = Comment.objects.filter(author=pdi_user.user).aggregate(Avg("rating")).values()[0]
-
-    return render(request,'helpdesk/ranking.html', {'section': 'ranking', 'rol' : 'pdi', 'user_ranking':user_ranking})
 
 @login_required
 def pdi_profile(request, pk):
@@ -210,42 +197,50 @@ def pas_ask(request):
     return render(request,'helpdesk/create_topic_for_pdi.html', {'section': 'ask', 'rol' : 'pas'})
 
 @login_required
-def pas_ranking(request):
-    try:
-        request.user.pas
-    except:
-        return HttpResponse('Unauthorized', status=401)
-    pas_users = Pas.objects.all()
-    reputation_ranking = {}
-    speed_ranking = {}
-    closed_ranking = {}
+def ranking(request):
 
-    first_comment = {}
-    topics = {}
+    if request.method == 'GET':
+        if 'user_type' in request.GET.keys():
+            user_type = request.GET['user_type']
+        else:
+            user_type = 'pdi'
 
-    for pas_user in pas_users:
-        reputation_ranking[pas_user] = Comment.objects.filter(author=pas_user.user).aggregate(Avg("rating")).values()[0]
-        closed_ranking[pas_user] = Topic.objects.filter(receiver=pas_user.user, status='CLOSED').count()
+        if user_type == 'pdi':
+            users = Pdi.objects.all()
+        elif user_type == 'pas':
+            users = Pas.objects.all()
+        else:
+            return HttpResponse('Unauthorized', status=401)
 
-        topics[pas_user] = Topic.objects.filter(receiver=pas_user.user)
-        time = 0
-        counter = 0
-        for topic in topics[pas_user]:
-            topic_comments = Comment.objects.filter(topic=topic, author=pas_user.user).order_by('date_published')
-            if(topic_comments.count()):
-                time += (Comment.objects.filter(topic=topic.id).order_by('date_published')[0].date_published - topic.creation_date).total_seconds()
-                counter += 1
+        reputation_ranking = {}
+        speed_ranking = {}
+        closed_ranking = {}
 
-        if(counter!=0):
-            speed_ranking[pas_user] = time / counter
+        topics = {}
 
-    import operator
+        for user in users:
+            reputation_ranking[user] = Comment.objects.filter(author=user.user).aggregate(Avg("rating")).values()[0]
+            closed_ranking[user] = Topic.objects.filter(receiver=user.user, status='CLOSED').count()
 
-    reputation = sorted(reputation_ranking.items(), key=operator.itemgetter(1), reverse=True)
-    speed = sorted(speed_ranking.items(), key=operator.itemgetter(1), reverse=True)
-    closed = sorted(closed_ranking.items(), key=operator.itemgetter(1), reverse=True)
+            topics[user] = Topic.objects.filter(receiver=user.user)
+            time = 0
+            counter = 0
+            for topic in topics[user]:
+                topic_comments = Comment.objects.filter(topic=topic, author=user.user).order_by('date_published')
+                if(topic_comments.count()):
+                    time += (Comment.objects.filter(topic=topic.id).order_by('date_published')[0].date_published - topic.creation_date).total_seconds()
+                    counter += 1
 
-    return render(request,'helpdesk/ranking.html', {'section': 'ranking', 'rol' : 'pas', 'reputation_ranking':reputation, 'closed_ranking' : closed, 'speed_ranking': speed})
+            if(counter!=0):
+                speed_ranking[user] = time / counter
+
+        import operator
+
+        reputation = sorted(reputation_ranking.items(), key=operator.itemgetter(1), reverse=True)
+        speed = sorted(speed_ranking.items(), key=operator.itemgetter(1), reverse=True)
+        closed = sorted(closed_ranking.items(), key=operator.itemgetter(1), reverse=True)
+
+        return render(request,'helpdesk/ranking.html', {'section': 'ranking', 'rol' : 'pas', 'user_type':user_type, 'reputation_ranking':reputation, 'closed_ranking' : closed, 'speed_ranking': speed})
 
 @login_required
 def pas_profile(request, pk):

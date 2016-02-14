@@ -1,6 +1,31 @@
 {% extends "base.html" %}
+
    {% block title %}Dashboard{% endblock %}
+
    {% block content %}
-     <h1>Dashboard</h1>
-     <p>Welcome to your dashboard.</p>
+
+     <div>
+       <a href="/helpdesk/ranking/?user_type=pdi"  {% if user_type == "pdi" %}class="selected"{% endif %}>PDI Ranking</a> - <a href="/helpdesk/ranking/?user_type=pas" {% if user_type == "pas" %}class="selected"{% endif %}>PAS Ranking</a>
+     </div>
+     <div>
+     Closed Tickets Ranking
+{%  for entry in closed_ranking %}
+    <p>{{ forloop.counter }}. {{ entry.0.user.username }} - {{ entry.0.department.name }}</p>
+{% endfor %}
+    </div>
+
+    <div>
+     Speed Ranking
+{%  for entry in speed_ranking %}
+    <p>{{ forloop.counter }}. {{ entry.0.user.username }} - {{ entry.0.department.name }}</p>
+{% endfor %}
+    </div>
+
+    <div>
+     Reputation Ranking
+{%  for entry in reputation_ranking %}
+    <p>{{ forloop.counter }}. {{ entry.0.user.username }} - {{ entry.0.department.name }}</p>
+{% endfor %}
+    </div>
+
 {% endblock %}

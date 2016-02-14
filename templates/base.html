@@ -44,14 +44,7 @@
          {% endif %}{% if section == "ask_faq" %}class="selected"{% endif %}
          >Nova consulta</a>
 
-        {% if rol != "student" %}
-            <a {% if rol == "pdi" %}
-         href="{% url "pdi_ranking" %}"
-         {% elif rol == "pas" %}
-         href="{% url "pas_ranking" %}"
-         {% endif %}{% if section == "ranking" %}class="selected"{% endif %}
-         >Rànquing</a>
-        {% endif %}
+            <a {% if rol != "" %} href="{% url "ranking" %}" {% endif %} {% if section == "ranking" %}class="selected"{% endif %}>Rànquing</a>
 
             <a 	{% if rol == "pdi" %}
          href="{% url "pdi_profile" request.user.pdi.pk %}"
@@ -83,14 +76,9 @@
          href="{% url "student_new_topic_pdi" %}"
          {% endif %}{% if section == "ask_faq" %}class="selected"{% endif %}
          >Nova consulta</a></li>
-			 {% if rol != "student" %}		<li>
-            <a {% if rol == "pdi" %}
-         href="{% url "pdi_ranking" %}"
-         {% elif rol == "pas" %}
-         href="{% url "pas_ranking" %}"
-         {% endif %}{% if section == "ranking" %}class="selected"{% endif %}
-         >Rànquing</a>
-       </li> {% endif %}
+		<li>
+            <a {% if rol != "" %} href="{% url "ranking" %}" {% endif %} {% if section == "ranking" %}class="selected"{% endif %}>Rànquing</a>
+       </li>
 					<li><a 	{% if rol == "pdi" %}
          href="{% url "pdi_profile" pk=request.user.pdi.pk %}"
          {% elif rol == "pas" %}
