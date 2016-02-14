@@ -511,13 +511,13 @@ def topic_comment(request, topic_id):
                 return HttpResponse('Unauthorized', status=401)
 
     if request.method == 'POST':
-        form = NewComment(request.POST)
+        form = NewComment(request.POST, request.FILES)
 
         if form.is_valid():
             topic = Topic.objects.get(pk=topic_id)
             comment = Comment(content=form.cleaned_data['content'], author=request.user, topic=topic).save()
 
-    return HttpResponseRedirect('/helpdesk/topics/'+str(topic.id)+'/')
+    return HttpResponseRedirect('/helpdesk/topics/'+str(topic_id)+'/')
 
 
 @login_required
@@ -537,14 +537,13 @@ def student_profile(request, pk):
 def vote_comment(request):
 
     comment_id = None
+    rating = 0
     if request.method == 'GET':
         comment_id = request.GET['comment_id']
-
-    rating = 0
+        rating = request.GET['rating']
     if comment_id:
         comment = Comment.objects.get(id=int(comment_id))
         if comment:
-            rating = comment.rating + 1
             comment.rating =  rating
             comment.save()
 
