@@ -8,49 +8,86 @@
 
 
 <div>
-<p>Topic title: {{topic.title}}</p>
+  <center>
+    <h1>Consulta</h1>
+    <div class="titol"></div>
+  </center>
 
+  <div class="container">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 panel quadre">
+        <div class="row espai">
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center">
+            <p><b>Publication Data:</b></p> 
+            <p class="list-group-item disabled">{{topic.creation_date}}</p>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center">
+            <p><b>Priority:</b> </p> 
+            <p class="list-group-item disabled">{{topic.priority}}</p> 
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center">
+            <p><b>Status:</b></p> 
+            <p class="list-group-item list-group-item-info">{{topic.status}}</p>
+          </div>
+        </div>
+    </div>
 
-<p>
-  Publication Data: {{topic.creation_date}} Priority: {{topic.priority}} Status: {{topic.status}}
-</p>
-
-{% if request.user.id == topic.author.id and topic.status != "CLOSED"  %}
-<form action="/helpdesk/topics/{{topic.id}}/" method="POST">
+  {% if request.user.id == topic.author.id and topic.status != "CLOSED"  %}
+  <form action="/helpdesk/topics/{{topic.id}}/" method="POST">
     {% csrf_token %}
     <input type="submit" value="Close Ticket" />
-</form>
-{% endif %}
+  </form>
+  {% endif %}
 
 </div>
 
 {% if topic.status != "CLOSED"  %}
-<button type="button" id="reply_button">Reply</button>
+<div class="container">
+  <button type="button" id="reply_button" class="btn btn-info">Respondre</button>
 
-<div id="reply_container" style="display:none;">
+  <div id="reply_container" style="display:none;"><br>
     <form action="/helpdesk/topics/{{topic.id}}/comment/" method="post">
       {% csrf_token %}
       {% bootstrap_form comment_form %}
       {% buttons submit='OK' reset="Reset" %}{% endbuttons %}
     </form>
+  </div>
 </div>
 {% endif %}
-
-<div>
-<p>
-  Author: {{topic.author}}
-</p>
-<p>
-  Content: {{topic.content}}
-</p>
+<br>
+<div class="container">
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 panel quadre espai">
+    <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6 autor">
+      <b> {{topic.author}}</b>
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 text-center">
+      <p class="list-group-item disabled">{{topic.creation_date}}</p>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-justify">
+      <b> {{topic.title}}</b>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-justify">
+      <p> {{topic.content}}</p>
+    </div>
+  </div>
 </div>
-<div>
-{% for comment in comments %}
-  <p>Comment author: {{comment.author}}</p>
-  <p>Comment content: {{comment.content}}</p>
-  <p>
 
-  <strong id="rating_value">{{ comment.rating }}</strong> people like this category
+<div class="container">
+  {% if comments|length > 0 %}
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-justify panel quadre espai">
+    {% for comment in comments %}
+    <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6 autor">
+      <b> {{comment.author}}</b>
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 text-center">
+      <p class="list-group-item disabled">{{comment.date_published}}</p>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-justify">
+      <p>Comment content: {{comment.content}}</p>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right">
+    <p>
+
+  <b><i>Valoració</i></b> <strong id="rating_value">{{ comment.rating }}</strong> 
 
   {% if user.is_authenticated and request.user.id == topic.author.id %}
           <button id="rating" data-comid="{{comment.id}}" class="btn btn-primary" type="button">
@@ -60,7 +97,12 @@
   {% endif %}
 
   </p>
-  <p></p>
+</div>  
 {% endfor %}
-</div>
+  </div>
+  {% endif %}
 {% endblock %}
+  </div>
+
+
+

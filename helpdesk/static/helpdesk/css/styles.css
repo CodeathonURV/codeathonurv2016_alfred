@@ -36,13 +36,14 @@ label{
 	z-index: 100;
 }
 .nav2{
+	z-index: 15;
 	position: fixed;
 	top:0;
 	right: 0;
 	margin: 0 -440px 0 0;
 	padding: 110px 30px 0 30px;
 	width: 250px;
-	height: 350px;
+	height: 450px;
 	background-color:#1b1b1b;
 	color: white;
 	box-shadow: 0 5px 5px 0 rgba(0,0,0,0.50);
@@ -124,6 +125,16 @@ footer p{
 	font-family: arial;
 	font-size: 16px;
 	color: #313131;
+}
+.espai{
+	padding: 10px;
+}
+.quadre{
+	border: 1px solid #8B271B;
+}
+.autor{
+	padding-top: 10px;
+	font-size: 15px;
 }
 
 
