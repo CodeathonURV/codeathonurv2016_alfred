@@ -1,15 +1,8 @@
+
+function put_rating(p1, p2){
+  $.get('/helpdesk/vote/', {comment_id: p1, rating: p2})
+}
 $(document).ready(function() {
-
-  $('#rating').click(function(){
-      console.log("hola que tal");
-
-      var comid
-      comid = $(this).attr("data-comid");
-      $.get('/helpdesk/vote/', {comment_id: comid}, function(data){
-                 $('#rating_value').html(data);
-                 $('#rating').hide();
-      });
-  });
 
    $( "#reply_button").click(function() {
 

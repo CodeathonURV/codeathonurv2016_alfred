@@ -94,10 +94,11 @@ class Topic(models.Model):
 
 class Comment(models.Model):
     content = models.TextField()
-    rating = models.IntegerField(null=True)
+    rating = models.FloatField(null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comment_author')
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='comment_topic')
     date_published = models.DateTimeField('Data de publicació', default=datetime.now)
+    document = models.FileField(null=True, blank=True)
     def __unicode__(self):
         return self.content
 

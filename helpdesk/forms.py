@@ -4,7 +4,7 @@ from django.forms import ModelChoiceField
 
 class NewComment(forms.Form):
     content = forms.CharField(widget=forms.Textarea)
-
+    document = forms.FileField(required=False)
 class NewTopicForPas(forms.Form):
 
     title = forms.CharField()
@@ -75,8 +75,6 @@ class TeacherChooser(forms.Form):
             dynamic_choices = None # if normal form
         super(TeacherChooser, self).__init__(*args, **kwargs)
         if dynamic_choices is not None:
-            self.fields['teacher'] = ModelChoiceField(
-                                          queryset=dynamic_choices)
+            self.fields['teacher'] = ModelChoiceField(queryset=dynamic_choices)
     class Meta:
         model = User
-        

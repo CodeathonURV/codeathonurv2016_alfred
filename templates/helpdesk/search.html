@@ -22,7 +22,7 @@
 {% if not empty %}
 <div class="container espai" style="margin-top:20px;" align="center">
     {% if rol == 'student' %}
-        <button type="button" class="btn btn-info boto"><a href="/helpdesk/student/ask/pdi/" >Pregunta a un mestre</a></button>  <button type="button" class="btn btn-info boto"><a href="/helpdesk/student/ask/pas/" >Preguntar a PAS</a></button>
+        <button type="button" class="btn btn-info boto"><a href="/helpdesk/student/ask/pdi/" >Pregunta a un docent</a></button>  <button type="button" class="btn btn-info boto"><a href="/helpdesk/student/ask/pas/" >Preguntar a PAS</a></button>
     {% elif rol == 'pdi' %}
         <button type="button" class="btn btn-info boto"><a href="/helpdesk/pdi/ask/" >Preguntar a PAS</a></button>
     {% elif rol == 'pas' %}
@@ -31,7 +31,7 @@
 </div>
 {% if departments %}
 
-    
+
 <p class="text-center"> Tenim alguns suggeriments per a tú abans de començar una nova pregunta: </p>
 
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
