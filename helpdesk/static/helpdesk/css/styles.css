@@ -128,20 +128,7 @@ footer p{
 	font-size: 16px;
 	color: #313131;
 }
-.footerdos{
-	background: #F1F1F1;
-	height: 78px;
-	width: 100%;
-	position: absolute;
-	bottom: 0px;
-}
-.footerdos p{
-	float: right;
-	padding: 30px 50px 0 0;
-	font-family: arial;
-	font-size: 16px;
-	color: #313131;
-}
+
 .espai{
 	padding: 10px;
 }
@@ -200,7 +187,6 @@ footer p{
 }
 .log-in{
 	background-color: #8B271B;
-	height: 800px;
 	text-align: center;
 }
 	
