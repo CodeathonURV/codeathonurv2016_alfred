@@ -25,7 +25,7 @@ class Department(models.Model):
     class Meta:
         verbose_name = 'Departament'
         verbose_name_plural = 'Departaments'
-        
+
 class Subject(models.Model):
     title = models.CharField(max_length=200, verbose_name='Nom')
     year = models.DateTimeField('any', default=datetime.now)
