@@ -4,23 +4,42 @@
 {% load bootstrap3 %}
 
 {% block content %}
+
+
 <form id="searchform" action="/helpdesk/search/" method="get" accept-charset="utf-8">
  <button class="searchbutton" type="submit">
    <i class="fa fa-search"></i>
  </button>
- <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
+ <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Write the keyword of your question">
 </form>
 
+
+
+{% if not empty %}
+
+    {% if rol == 'student' %}
+        <a href="/helpdesk/student/ask/pdi/" >Ask to a teacher</a> - <a href="/helpdesk/student/ask/pas/" >Ask to administration/departments</a>
+    {% elif rol == 'pdi' %}
+        <a href="/helpdesk/pdi/ask/" >Ask to administration/departments</a>
+    {% elif rol == 'pas' %}
+        <a href="/helpdesk/pas/ask/" >Ask to administration/departments</a>
+    {% endif %}
+
 {% if departments %}
+
+    <p> We have some suggestions for you before you start a new question </p>
+
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 <center>
-<h1>Depatments
+<h1>Found in Departments
 
                 </h1>
     <div class="titol">
 
 </center>
 </div>
+
+
 <ul>
 {% for consult in departments %}
   <li><a href="/helpdesk/topics/{{ consult.id }}">{{ consult.title }}</li></a>
@@ -28,15 +47,23 @@
 </ul>
 {% endif %}
 
+
 {% if subjects %}
+
+    {% if not departments %}
+        <p> We have some suggestions for you before you start a new question </p>
+    {% endif %}
+
 <center>
-<h1>Subjects
+<h1>Found in Subjects
 
                 </h1>
     <div class="titol">
 
 </center>
 </div>
+
+
     <ul>
     {% for consult in subjects %}
       <li><a href="/helpdesk/topics/{{ consult.id }}">{{ consult.title }}</li></a>
@@ -46,7 +73,8 @@
 {% endif %}
 
 {% if not subjects and not departments %}
-    <p>Not results</p>
+    <p>Be have tryed to give you a quick answer, but it couldn't be possible. Please ask to the proper person/deparment</p>
 {% endif %}
 </div>
+    {% endif %}
 {% endblock %}

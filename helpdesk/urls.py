@@ -6,7 +6,7 @@ urlpatterns = [
    # post views,
     url(r'^pdi/$', views.pdi_topics, name='pdi_topics_home'),
     url(r'^pas/$', views.pas_topics, name='pas_topics_home'),
-    url(r'^student/$', views.student_ask_faq, name='student_ask_faq_home'),
+    url(r'^student/$', views.get_queryset, name='student_ask_faq_home'),
 
     url(r'^search/$', views.get_queryset, name='search'),
     url(r'^pdi/topics/$', views.pdi_topics, name='pdi_topics'),
@@ -15,9 +15,9 @@ urlpatterns = [
 
     url(r'^topics/(?P<topic_id>[0-9]+)$', views.topic, name='topic'),
 
-    url(r'^pdi/ask_faq/$', views.pdi_ask_faq, name='pdi_ask_faq'),
-    url(r'^pas/ask_faq/$', views.pas_ask_faq, name='pas_ask_faq'),
-    url(r'^student/ask_faq/$', views.student_ask_faq, name='student_ask_faq'),
+    url(r'^pdi/ask_faq/$', views.get_queryset, name='pdi_ask_faq'),
+    url(r'^pas/ask_faq/$', views.get_queryset, name='pas_ask_faq'),
+    url(r'^student/ask_faq/$', views.get_queryset, name='student_ask_faq'),
 
     url(r'^ranking/$', views.ranking, name='ranking'),
 
