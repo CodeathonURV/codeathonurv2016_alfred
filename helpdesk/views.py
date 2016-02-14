@@ -239,12 +239,22 @@ def pas_ranking(request):
     except:
         return HttpResponse('Unauthorized', status=401)
     pas_users = Pas.objects.all()
-    user_ranking = {}
+    reputation_ranking = {}
+    speed_ranking = {}
+    closed_ranking = {}
+
+    first_comment = {}
+    topics = {}
+
     for pas_user in pas_users:
-        user_ranking[pas_user] = Comment.objects.filter(author=pas_user.user).aggregate(Avg("rating")).values()[0]
-    print 'user_comments', user_comments
-    return HttpResponse('Unauthorized', status=401)
-    return render(request,'helpdesk/ranking.html', {'section': 'ranking', 'rol' : 'pas', 'user_ranking':user_ranking})
+        reputation_ranking[pas_user] = Comment.objects.filter(author=pas_user.user).aggregate(Avg("rating")).values()[0]
+        closed_ranking[pas_user] = Topic.objects.filter(receiver=pas_user.user, status='CLOSED').count()
+
+
+
+
+
+    return render(request,'helpdesk/ranking.html', {'section': 'ranking', 'rol' : 'pas', 'reputation_ranking':reputation_ranking, 'closed_ranking' : closed_ranking, 'speed_ranking': speed_ranking})
 
 @login_required
 def pas_profile(request, pk):
