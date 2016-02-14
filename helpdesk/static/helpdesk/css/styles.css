@@ -128,6 +128,20 @@ footer p{
 	font-size: 16px;
 	color: #313131;
 }
+.footerdos{
+	background: #F1F1F1;
+	height: 78px;
+	width: 100%;
+	position: absolute;
+	bottom: 0px;
+}
+.footerdos p{
+	float: right;
+	padding: 30px 50px 0 0;
+	font-family: arial;
+	font-size: 16px;
+	color: #313131;
+}
 .espai{
 	padding: 10px;
 }
@@ -183,6 +197,33 @@ footer p{
 	font-size: 20px;
 	text-align: center;
 	border-bottom: 1px solid #8B271B;
+}
+.log-in{
+	background-color: #8B271B;
+	height: 800px;
+	text-align: center;
+}
+	
+.log-in h3{
+	font-size: 50px;
+	color: white;
+}
+.logotip{
+	padding: 70px 0 120px 0;
+}
+.log-in a{
+	color: white;
+}
+.fondo-tres{
+	background-color: #8B271B;
+	margin: 0;
+}
+.logout{
+	color: white;
+}
+.titol-out{
+	color: white;
+	font-size: 48px;
 }
 
 /* DESKTOP VERSION */

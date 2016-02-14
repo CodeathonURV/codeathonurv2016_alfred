@@ -1,6 +1,39 @@
-{% extends "base.html" %}
-{% block title %}Logged out{% endblock %}
-{% block content %}
- <h1>Logged out</h1>
- <p>You have been successfully logged out. You can <a href="{% url 'login' %}">log-in again</a>.</p>
-{% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+ <title>{% block title %}{% endblock %}</title>
+
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+
+{% load staticfiles %}
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="{% static 'helpdesk/js/jquery.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'helpdesk/css/styles.css' %}" />
+
+</head>
+  <body class="log-in">
+    <a href="/"><img src="{% static 'helpdesk/img/logo_alfred.png' %}" width="70%" class="logotip" ></a>
+ <div class="container-fluid fondo-tres">
+	<center>
+		<h2 class="titol-out">Sessió tancada</h2>
+		
+	</center>
+	<p class="text-center" style="font-size:16px; color:white;">Sessió tancada amb éxit. <br>Si vols pots tornar a entrar.<br><br> <a href="{% url 'login' %}" class="btn btn-success">Tornar a entrar</a></p>
+
+</div>
+</body>
+  <div class="footerdos">
+    <p>© CODEATHON URV 2016 - DJANGOG</p>
+  </div>
+</html>
