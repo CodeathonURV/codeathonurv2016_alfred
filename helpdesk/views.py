@@ -129,7 +129,13 @@ def pdi_profile(request, pk):
         request.user.pdi
     except:
         return HttpResponse('Unauthorized', status=401)
-    return render(request,'helpdesk/pdi_profile.html', {'section': 'profile', 'rol' : 'pdi'})
+
+    pdi = Pdi.objects.get(pk=pk)
+
+    subjects = pdi.subjects.all()
+
+    return render(request,'helpdesk/pdi_profile.html', {'pdi': pdi, 'subjects': subjects, 'section': 'profile', 'rol' : 'pdi'})
+
 
 @login_required
 def pas_topics(request):
@@ -246,8 +252,10 @@ def pas_profile(request, pk):
         request.user.pas
     except:
         return HttpResponse('Unauthorized', status=401)
-    return render(request,'helpdesk/pas_profile.html', {'section': 'profile', 'rol' : 'pas'})
 
+    pas = Pas.objects.get(pk=pk)
+
+    return render(request,'helpdesk/pas_profile.html', {'pas': pas, 'section': 'profile', 'rol' : 'pas'})
 
 
 @login_required
@@ -430,5 +438,8 @@ def student_profile(request, pk):
     except:
         return HttpResponse('Unauthorized', status=401)
 
-    #TODO
-    return render(request,'helpdesk/student_profile.html', {'form': form, 'section': 'profile', 'rol' : 'student'})
+    student = Student.objects.get(pk=pk)
+
+    subjects = student.subjects.all()
+
+    return render(request,'helpdesk/student_profile.html', {'student': student, 'subjects': subjects, 'section': 'profile', 'rol' : 'student'})
