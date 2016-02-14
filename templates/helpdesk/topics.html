@@ -6,11 +6,31 @@
 {% block content %}
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
+{% if sent == 'True' %}
 <center>
-    <h1>Consultes obertes</h1>
+    <h1>Consultes Enviades</h1>
     <div class="titol">
 </center>
 </div>
+    {% if rol == "pas" %}
+    <center>Cambiar a <a href="/helpdesk/pas/topics/">Consultes Rebudes</a></center>
+    {% elif rol == "pdi" %}
+    <center>Cambiar a <a href="/helpdesk/pdi/topics/">Consultes Rebudes</a></center>
+    {% endif %}
+
+ {% else %}
+    <center>
+<h1>Consultes Rebudes</h1>
+    <div class="titol">
+</center>
+</div>
+    {% if rol == "pas" %}
+    <center>Cambiar a <a href="/helpdesk/pas/topics/?sent=True">Consultes Enviades</a></center>
+    {% elif rol == "pdi" %}
+    <center>Cambiar a <a href="/helpdesk/pdi/topics/?sent=True">Consultes Enviades</a></center>
+    {% endif %}
+{% endif %}
+
 <div class="container">
 {% if table.page %}
     <div class="table-container">

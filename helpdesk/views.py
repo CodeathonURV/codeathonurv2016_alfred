@@ -19,11 +19,21 @@ def pdi_topics(request):
         request.user.pdi
     except:
         return HttpResponse('Unauthorized', status=401)
-    table = TopicsTable(Topic.objects.filter(author__id=request.user.id))
+
+    sent = 'False'
+    if request.method == 'GET':
+        if 'sent' in request.GET.keys():
+            sent = 'True'
+
+    if sent=='True':
+        table = SentTopicsTable(Topic.objects.filter(author__id=request.user.id))
+    else:
+        table = ReceivedTopicsTable(Topic.objects.filter(receiver__id=request.user.id))
+
     # topic_author = Topic.objects.filter(author__id=request.user.id)
     # topic_receiver = Topic.objects.filter(receiver__id=request.user.id)
     RequestConfig(request).configure(table)
-    return render(request,'helpdesk/topics.html', {'section': 'topics', 'rol' : 'pdi', 'table':table})
+    return render(request,'helpdesk/topics.html', {'sent':sent, 'section': 'topics', 'rol' : 'pdi', 'table':table})
 
 @login_required
 def pdi_new_topic_for_pas(request):
@@ -108,7 +118,21 @@ def pas_topics(request):
         request.user.pas
     except:
         return HttpResponse('Unauthorized', status=401)
-    return render(request,'helpdesk/topics.html', {'section': 'topics', 'rol' : 'pas'})
+
+    sent = 'False'
+    if request.method == 'GET':
+        if 'sent' in request.GET.keys():
+            sent = 'True'
+
+    if sent=='True':
+        table = SentTopicsTable(Topic.objects.filter(author__id=request.user.id))
+    else:
+        table = ReceivedTopicsTable(Topic.objects.filter(receiver__id=request.user.id))
+
+    # topic_author = Topic.objects.filter(author__id=request.user.id)
+    # topic_receiver = Topic.objects.filter(receiver__id=request.user.id)
+    RequestConfig(request).configure(table)
+    return render(request,'helpdesk/topics.html', {'sent':sent, 'section': 'topics', 'rol' : 'pas', 'table':table})
 
 @login_required
 def pas_new_topic_for_pas(request):
@@ -256,9 +280,9 @@ def student_topics(request):
         request.user.student
     except:
         return HttpResponse('Unauthorized', status=401)
-    table = TopicsTable(Topic.objects.filter(author__id=request.user.id))
+    table = SentTopicsTable(Topic.objects.filter(author__id=request.user.id))
     RequestConfig(request).configure(table)
-    return render(request,'helpdesk/topics.html', {'section': 'topics', 'rol':'student', 'table':table})
+    return render(request,'helpdesk/topics.html', {'sent':'True', 'section': 'topics', 'rol':'student', 'table':table})
 
 @login_required
 def  student_new_topic_for_pdi(request):
@@ -407,7 +431,6 @@ def get_queryset(request):
         print 'result', type(result), result
         subjects = result.filter(department=False)[:10]
         departments = result.filter(department=True)[:10]
-        table = TopicsTable(result)
         return render(request,'helpdesk/search.html', {'empty': False, 'section': 'ask_faq', 'rol': rol, 'subjects' : subjects, 'departments' : departments  })
     else:
         return render(request,'helpdesk/search.html', {'empty': True, 'section': 'ask_faq', 'rol': rol, 'subjects' : {}, 'departments' : {}  })
