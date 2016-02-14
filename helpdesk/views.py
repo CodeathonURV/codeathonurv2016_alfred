@@ -34,10 +34,6 @@ def pdi_new_topic_for_pas(request):
         # check whether it's valid:
 
         if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-
             department = form.cleaned_data['department']
             pas_set = department.pas_set.all()
             title = form.cleaned_data["title"]
@@ -46,10 +42,10 @@ def pdi_new_topic_for_pas(request):
 
             if(len(pas_set) == 1):
                 teacher = pas_set[0]
-                topic = Topic(title=title, content=content, priority=priority, receiver=teacher.user, author=request.user).save()
+                topic = Topic(title=title, content=content, priority=priority, receiver=teacher.user, department=True, author=request.user).save()
                 return HttpResponseRedirect('/helpdesk/pdi/topics')
             else:
-                topic = Topic(title=title, content=content, priority=priority, author=request.user)
+                topic = Topic(title=title, content=content, priority=priority, department=True, author=request.user)
                 topic.save()
                 request.session["topic"] = topic.id
                 request.session["department"] = department.id
@@ -100,15 +96,6 @@ def pdi_ask(request):
         return HttpResponse('Unauthorized', status=401)
     return render(request,'helpdesk/create_topic_for_pdi.html', {'section': 'ask', 'rol' : 'pdi'})
 
-@login_required
-def pdi_topic(request, topic_id):
-    try:
-        request.user.pdi
-    except:
-        return HttpResponse('Unauthorized', status=401)
-    topic = Topic.objects.get(pk=topic_id)
-    comments = list(Comment.objects.filter(topic__id=topic_id)).order_by('date_published')
-    return render(request,'helpdesk/topic.html', {'section': 'topic', 'rol' : 'pdi', 'topic':topic, 'comments':comments})
 
 @login_required
 def pdi_ranking(request):
@@ -167,10 +154,10 @@ def  pas_new_topic_for_pas(request):
 
             if(len(pas_set) == 1):
                 teacher = pas_set[0]
-                topic = Topic(title=title, content=content, priority=priority, receiver=teacher.user, author=request.user).save()
+                topic = Topic(title=title, content=content, priority=priority, receiver=teacher.user, department=True, author=request.user).save()
                 return HttpResponseRedirect('/helpdesk/pas/topics')
             else:
-                topic = Topic(title=title, content=content, priority=priority, author=request.user)
+                topic = Topic(title=title, content=content, priority=priority, department=True, author=request.user)
                 topic.save()
                 request.session["topic"] = topic.id
                 request.session["department"] = department.id
@@ -221,16 +208,6 @@ def pas_ask(request):
     except:
         return HttpResponse('Unauthorized', status=401)
     return render(request,'helpdesk/create_topic_for_pdi.html', {'section': 'ask', 'rol' : 'pas'})
-
-@login_required
-def pas_topic(request):
-    try:
-        request.user.pas
-    except:
-        return HttpResponse('Unauthorized', status=401)
-    topic = Topic.objects.get(pk=topic_id)
-    comments = list(Comment.objects.filter(topic__id=topic_id)).order_by('date_published')
-    return render(request,'helpdesk/topic.html', {'section': 'topic', 'rol' : 'pas', 'topic':topic, 'comments':comments})
 
 @login_required
 def pas_ranking(request):
@@ -365,10 +342,10 @@ def  student_new_topic_for_pas(request):
 
             if(len(pas_set) == 1):
                 teacher = pas_set[0]
-                topic = Topic(title=title, content=content, priority=priority, receiver=teacher.user, author=request.user).save()
+                topic = Topic(title=title, content=content, priority=priority, receiver=teacher.user, department=True, author=request.user).save()
                 return HttpResponseRedirect('/helpdesk/student/topics')
             else:
-                topic = Topic(title=title, content=content, priority=priority, author=request.user)
+                topic = Topic(title=title, content=content, priority=priority, department=True, author=request.user)
                 topic.save()
                 request.session["topic"] = topic.id
                 request.session["department"] = department.id
@@ -416,12 +393,27 @@ def student_ask_faq(request):
 def get_queryset(request):
     result = ""
     query = request.GET.get('q')
+    try:
+        request.user.student
+        rol = 'student'
+    except Exception:
+        try:
+            request.user.pdi
+            rol = 'pdi'
+        except Exception:
+            try:
+                request.user.pas
+                rol = 'pas'
+            except Exception:
+                return HttpResponse('Unauthorized', status=401)
     if query:
-        print 'q', query
+
         result = Topic.objects.filter(is_public=True).filter(Q(title__icontains=query)).order_by('last_update')
-        print 'result', result
+        print 'result', type(result), result
+        subjects = result.filter(department=False)[:10]
+        departments = result.filter(department=True)[:10]
         table = TopicsTable(result)
-    return render(request,'helpdesk/search.html', {'section': 'results', 'role':'student', 'table' : table })
+    return render(request,'helpdesk/search.html', {'section': 'results', 'rol': rol, 'subjects' : subjects, 'departments' : departments  })
 
 @login_required
 def student_ask(request):
@@ -432,14 +424,25 @@ def student_ask(request):
     return render(request,'helpdesk/create_topic_for_pdi.html', {'section': 'ask', 'rol' : 'student'})
 
 @login_required
-def student_topic(request, topic_id):
+def topic(request, topic_id):
+    #TODO: Fix the way to assign roles to users.
     try:
         request.user.student
-    except:
-        return HttpResponse('Unauthorized', status=401)
+        rol = 'student'
+    except Exception:
+        try:
+            request.user.pdi
+            rol = 'pdi'
+        except Exception:
+            try:
+                request.user.pas
+                rol = 'pas'
+            except Exception:
+                return HttpResponse('Unauthorized', status=401)
+
     topic = Topic.objects.get(pk=topic_id)
-    comments = list(Comment.objects.filter(topic__id=topic_id).order_by('date_published'))
-    return render(request,'helpdesk/topic.html', {'section': 'topic', 'rol' : 'student', 'topic':topic, 'comments':comments})
+    comments = Comment.objects.filter(topic__id=topic_id).order_by('date_published')
+    return render(request,'helpdesk/topic.html', {'section': 'topic', 'rol' : rol, 'topic':topic, 'comments':comments})
 
 @login_required
 def student_profile(request, pk):
