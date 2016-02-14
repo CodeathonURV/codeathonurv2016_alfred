@@ -6,34 +6,41 @@
 {% block content %}
 
 
-<form id="searchform" action="/helpdesk/search/" method="get" accept-charset="utf-8">
- <button class="searchbutton" type="submit">
-   <i class="fa fa-search"></i>
- </button>
- <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Write the keyword of your question">
-</form>
-
+<div class="container-fluid fondo">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center">
+        <h3>Quina pregunta tens?</h3>
+        <form id="searchform" action="/helpdesk/search/" method="get" accept-charset="utf-8">
+            <input class="searchfield buscar" id="searchbox" name="q" type="text" placeholder=" Escriu la paraula clau de la teva pregunta...">
+            <button class="searchbutton btn btn-default btn-lg " type="submit">
+                <i class="glyphicon glyphicon-search"></i>
+            </button>
+        </form>
+    </div>
+</div>
 
 
 {% if not empty %}
-
+<div class="container espai" style="margin-top:20px;" align="center">
     {% if rol == 'student' %}
-        <a href="/helpdesk/student/ask/pdi/" >Ask to a teacher</a> - <a href="/helpdesk/student/ask/pas/" >Ask to administration/departments</a>
+        <button type="button" class="btn btn-info boto"><a href="/helpdesk/student/ask/pdi/" >Pregunta a un mestre</a></button>  <button type="button" class="btn btn-info boto"><a href="/helpdesk/student/ask/pas/" >Preguntar a PAS</a></button>
     {% elif rol == 'pdi' %}
-        <a href="/helpdesk/pdi/ask/" >Ask to administration/departments</a>
+        <button type="button" class="btn btn-info boto"><a href="/helpdesk/pdi/ask/" >Preguntar a PAS</a></button>
     {% elif rol == 'pas' %}
-        <a href="/helpdesk/pas/ask/" >Ask to administration/departments</a>
+        <button type="button" class="btn btn-info boto"><a href="/helpdesk/pas/ask/" >Preguntar a PAS</a></button>
     {% endif %}
-
+</div>
 {% if departments %}
 
-    <p> We have some suggestions for you before you start a new question </p>
+    
+<p class="text-center"> Tenim alguns suggeriments per a tú abans de començar una nova pregunta: </p>
 
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 <center>
-<h1>Found in Departments</h1>
+
+<h1>Trobat a Departaments</h1>
     <div class="titol">
 </div>
+
 </center>
 
 
@@ -49,23 +56,28 @@
 {% if subjects %}
 
     {% if not departments %}
-        <p> We have some suggestions for you before you start a new question </p>
+        <p class="text-center" > Tenim alguns suggeriments per a tú abans de començar una nova pregunta: </p>
     {% endif %}
 
+
+
 <center>
-<h1>Found in Subjects</h1>
+<h1>Trobat a Assignatures</h1>
     <div class="titol">
 </div>
+
 </center>
 
-
-
+<div class="container">
+<div class="panel quadre espai pregunta">
     <ul>
     {% for consult in subjects %}
-      <li><a href="/helpdesk/topics/{{ consult.id }}">{{ consult.title }}</li></a>
+      <li><b>Pregunta: </b><a href="/helpdesk/topics/{{ consult.id }}"> {{ consult.title }}</a></li>
+      <div class="text-justify"><b></b> {{ consult.content }}</div>
     {% endfor %}
     </ul>
-
+</div>
+</div>
 {% endif %}
 
 {% if not subjects and not departments %}
